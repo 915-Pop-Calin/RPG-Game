@@ -57,20 +57,39 @@ class Character:
         opponent.reduce_hp(damage)
         return damage
 
+    def deal_damage(self, opponent, damage):
+        opponent.reduce_hp(damage)
+
+    def life_steal(self, damage):
+        life_steal_value = self._weapon.get_life_steal()
+        life_stolen = life_steal_value * damage
+        self.heal(life_stolen)
+        string = self._name + " has healed for " + str(round(life_stolen,2)) + "!\n"
+        return string
+
     def hit(self, opponent, list_of_turns, turn_counter):
         critical = random.randint(1, 5)
         if critical == 1:
             damage = self.critical_attack(opponent)
             health = round(opponent.get_hp(), 2)
-            damage = str(round(damage, 2))
+
             health_2 = str(health)
             opponent_name = str(opponent.get_name())
-            string = "CRITICAL HIT! " + damage + " damage done to " + opponent_name + "!\n"
-            string += opponent_name + " is left with " + health_2 + " health!"
+            string = "CRITICAL HIT! " + str(round(damage,2)) + " damage done to " + opponent_name + "!\n"
+            string += opponent_name + " is left with " + health_2 + " health!\n"
+
+
         else:
             damage = self.attack(opponent)
             string = str(round(damage, 2)) + " damage done to " + opponent.get_name() + "!\n"
-            string += opponent.get_name() + " is left with " + str(round(opponent.get_hp(), 2)) + " health!"
+            string += opponent.get_name() + " is left with " + str(round(opponent.get_hp(), 2)) + " health!\n"
+        if self._weapon.has_effect() is not None:
+            new_string = self._weapon.effect(damage, self, opponent)
+            if new_string is not None:
+                string += new_string
+        if self._weapon.get_life_steal() is not None:
+            lifesteal_string = self.life_steal(damage)
+            string += lifesteal_string
         return string
 
     def get_name(self):

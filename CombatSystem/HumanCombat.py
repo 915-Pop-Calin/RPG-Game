@@ -20,6 +20,8 @@ class HumanCombat(Combat):
                 index = int(input("the index of the item you want to equip: \n"))
                 self._player.use_item(index)
                 invalid_input = False
+            elif command == "pass":
+                invalid_input = False
             else:
                 print("Invalid command")
         self._turn_counter += 1

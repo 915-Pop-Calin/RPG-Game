@@ -19,7 +19,8 @@ from Items.Weapons.Words import Words
 
 class HumanPlayer(Character):
     def __init__(self, name):
-        super().__init__(name, 3, 0, ToyKnife(), WornBandage(), 20)
+        #super().__init__(name, 3, 0, ToyKnife(), WornBandage(), 20)
+        super().__init__(name, 3, 0, TacosWhisper(), WornBandage(), 20)
         self.__level = 1
         self.__inventory = [None, None, None, None, None, None, None, None]
         self.ids = {100: HealthPotion, 200: ToyKnife, 201: Eclipse, 202: LanguageHacker, 203: TacosWhisper, 204: Words, 300: WornBandage, 301: Cloth, 302: TemArmor}
