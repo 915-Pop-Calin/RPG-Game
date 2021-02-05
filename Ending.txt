@@ -1,0 +1,71 @@
+So this is it.
+
+You have reached the end of your journey.
+
+You have achieved your goal.
+
+You have ___ the evil in this world.
+
+However, while doing so.
+
+You have succumbed to the darkness you swore to oppose.
+
+And you have became exactly the thing you swore to destroy.
+
+Now, you have your final choice.
+
+You can choose to destroy whatever is left of your humanity.
+
+Or you can spare it.
+
+The decision is yours.
+
+decision = destroy:
+
+Let us commence forth.
+
+*young character appears*
+
+*does not want to hurt you*
+
+*instead of attack, we have murder with red*
+
+Kill it.
+
+
+
+*teen character appears*
+
+*might want to hurt you*
+
+*instead of attack, we have murder with red*
+
+Destroy it.
+
+
+*old character appears*
+
+*wants to murder you*
+
+*instead of attack, we have murder with red*
+
+Destroy whatever it's left of your humanity.
+
+BAD ENDING
+
+
+decision = spare:
+
+Since when
+
+Were you the one in control?
+
+
+*??????? appears*
+
+????? attack ?????? def Something doesn't feel right
+
+*3-4 discourage + cling to your hopes which makes him vulnerable*
+
+
+GOOD ENDING

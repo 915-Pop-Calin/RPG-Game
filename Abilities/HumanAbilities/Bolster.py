@@ -13,7 +13,10 @@ class Bolster(Ability):
         string = "Your attack was increased by "
         string += str(difference)
         string += "!"
-        list_of_turns[turn_counter + 3] = self.decast
+        if turn_counter + 3 in list_of_turns.keys():
+            list_of_turns[turn_counter + 3].append(self.decast)
+        else:
+            list_of_turns[turn_counter + 3] = [self.decast]
         return string
 
     def decast(self, caster, opponent):

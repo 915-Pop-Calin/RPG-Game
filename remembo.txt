@@ -1,5 +1,5 @@
-Whisper - Every 4th shot deals double the damage (even crits)
-Eclipse - life steal
+Whisper - Every 4th shot deals double the damage (even crits) DONE
+Eclipse - life steal DONE
 an armour which heals every turn
 an item with extra crit
 very strong life stealer but damages you each turn

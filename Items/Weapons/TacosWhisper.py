@@ -14,7 +14,7 @@ class TacosWhisper(Weapon):
             string = "Taco's whisper has dealt " + str(damage) + " with the fourth shot!\n"
         else:
             self.__turn_counter += 1
-            string = None
+            string = ""
         return string
 
     def get_id(self):

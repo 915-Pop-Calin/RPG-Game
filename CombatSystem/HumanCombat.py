@@ -22,6 +22,8 @@ class HumanCombat(Combat):
                 invalid_input = False
             elif command == "pass":
                 invalid_input = False
+            elif command == "print level":
+                self._player.print_lvl()
             else:
                 print("Invalid command")
         self._turn_counter += 1

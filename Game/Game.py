@@ -12,8 +12,6 @@ class Game:
     def __init__(self):
         self.__player = None
         self.__dead = False
-        self.__consumables = {1: self.level_one_consumables, 2: self.level_two_consumables}
-        self.__levels = {1: self.level_one, 2: self.level_two}
         self.__enemy = None
         self.__combat = None
         self.__in_combat = True
@@ -21,6 +19,8 @@ class Game:
         self.__exit = False
         self.__level = 1
         self.droppable_items = []
+        self.level_specific_enemy ={1: Tem, 2: SpaghettiMonster}
+        self.level_specific_consumable = {2: [HealthPotion, 3], 3: [ExperiencePotion, 1]}
 
     def initialise_game(self):
         decision = input("Do you want to load your save file? Y/N\n")
@@ -51,9 +51,12 @@ class Game:
             elif decision != "next":
                 print("Invalid Command!")
 
-    def level_one(self):
-        print("WILD TEM APPEARED!")
-        self.__enemy = Tem()
+    def level(self):
+        self.__enemy = self.level_specific_enemy[self.__level]()
+        string = "WILD "
+        string += type(self.__enemy).__name__.upper()
+        string += " APPEARED!"
+        print(string)
         self.combat()
 
     def combat(self):
@@ -67,11 +70,6 @@ class Game:
         self.droppable_items.append(self.__enemy.get_weapon())
         self.droppable_items.append(self.__enemy.get_armor())
 
-    def level_two(self):
-        print("WILD SPAGHETTI MONSTER APPEARED!")
-        self.__enemy = SpaghettiMonster()
-        self.combat()
-
     def post_combat_drops(self):
         self.drops()
         index = random.randint(1, len(self.droppable_items) ** 2)
@@ -82,18 +80,16 @@ class Game:
             decision = input(string)
             if decision == "Y":
                 self.__player.pick_up(self.droppable_items[index])
+                self.droppable_items.remove(self.droppable_items[index])
 
-    def level_one_consumables(self):
+    def consumables(self):
         self.post_combat_drops()
-        print("Three health potions found!")
-        for i in range(3):
-            self.__player.pick_up(HealthPotion())
-        self.out_of_combat()
-
-    def level_two_consumables(self):
-        self.post_combat_drops()
-        print("An experience potion found!")
-        self.__player.pick_up(ExperiencePotion())
+        consumable = self.level_specific_consumable[self.__level]
+        number_of_consumable = consumable[1]
+        type_of_consumable = consumable[0]()
+        print(number_of_consumable, type(type_of_consumable).__name__, "s found!")
+        for i in range(number_of_consumable):
+            self.__player.pick_up(type_of_consumable)
         self.out_of_combat()
 
     def play(self):
@@ -101,12 +97,12 @@ class Game:
             if self.__in_combat:
                 if self.__exit:
                     break
-                self.__levels[self.__level]()
+                self.level()
 
                 self.__level += 1
                 self.__in_combat = False
             else:
-                self.__consumables[self.__level - 1]()
+                self.consumables()
                 if self.__exit:
                     break
                 self.__in_combat = True

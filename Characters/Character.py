@@ -16,10 +16,32 @@ class Character:
         self._options = {"attack": self.hit}
         self._list_of_turns = {}
         self._turn_counter = 0
+        self._saved_attack = self._attack
+        self._saved_armor = self._defense
+        self._stunned = False
+
+
+    def set_defense_and_armour_to_normal(self):
+        self._attack = self._saved_attack
+        self._defense = self._saved_armor
+
+    def set_attack_value(self, value):
+        self._attack = value
+
+    def set_defense_value(self, value):
+        self._defense = value
+
+    def get_saved_attack(self):
+        return self._saved_attack
+
+    def get_saved_armor(self):
+        return self._saved_armor
 
     def re_set_attack_health(self):
         self._attack = self._innate_attack + self._weapon.attack_value() + self._armor.attack_value()
         self._defense = self._innate_defense + self._weapon.defense_value() + self._armor.defense_value()
+        self._saved_armor = self._defense
+        self._saved_attack = self._attack
 
     def decrease_attack_value(self, value):
         self._attack = max(0, self._attack - value)
@@ -85,11 +107,13 @@ class Character:
             string += opponent.get_name() + " is left with " + str(round(opponent.get_hp(), 2)) + " health!\n"
         if self._weapon.has_effect() is not None:
             new_string = self._weapon.effect(damage, self, opponent)
-            if new_string is not None:
-                string += new_string
+            string += new_string
         if self._weapon.get_life_steal() is not None:
             lifesteal_string = self.life_steal(damage)
             string += lifesteal_string
+        if self._armor.has_effect() is not None:
+            new_string = self._armor.effect(damage, self, opponent)
+            string += new_string
         return string
 
     def get_name(self):
@@ -126,3 +150,15 @@ class Character:
 
     def get_options(self):
         return self._options
+
+    def get_attack_value(self):
+        return self._attack
+
+    def stun(self):
+        self._stunned = True
+
+    def isStunned(self):
+        return self._stunned
+
+    def unstun(self):
+        self._stunned = False

@@ -18,14 +18,18 @@ class Combat:
         self.__computer_combat = ComputerCombat(self.__computerPlayer)
 
     def print_options(self):
-        print("attack\nstrengthen\nbolster\ntaunt\ncheck stats")
+        string = "check stats\n"
+        for option in self.__humanPlayer.get_options().keys():
+            string += option
+            string += "\n"
+        print(string)
 
     def player_turn(self):
         self.__human_combat.check_undos(self.__computerPlayer)
         self.print_options()
         self.__human_combat.combat(self.__computerPlayer)
         if self.__computerPlayer.get_hp() <= 0:
-            print(self.__humanPlayer.get_name(), " has won!")
+            print(self.__humanPlayer.get_name(), " has won!\n")
             self.__human_combat.fight_end(self.__computerPlayer)
             self.__computer_combat.fight_end(self.__humanPlayer)
             self.__human_combat.post_combat()
@@ -38,6 +42,7 @@ class Combat:
         self.__computer_combat.check_undos(self.__humanPlayer)
         self.__computer_combat.combat(self.__humanPlayer)
         if self.__humanPlayer.get_hp() <= 0:
+            print(self.__computerPlayer.get_name(), " has won!\n")
             self.__computer_combat.fight_end(self.__humanPlayer)
             self.__human_combat.fight_end(self.__computerPlayer)
             self.__dead = True
@@ -47,9 +52,18 @@ class Combat:
     def fight(self):
         while not self.__combatDone:
             if self.__turn == 0:
-                self.player_turn()
+                if not self.__humanPlayer.isStunned():
+                    self.player_turn()
+                else:
+                    print(self.__humanPlayer.get_name(), "\b's turn was skipped because he was stunned!\n")
+                    self.__turn = 1
             else:
-                self.computer_turn()
+                if not self.__computerPlayer.isStunned():
+                    self.computer_turn()
+                else:
+                    print(self.__computerPlayer.get_name(), "\b's turn was skipped because he was stunned!\n")
+                    self.__turn = 0
+
 
     def isDead(self):
         return self.__dead

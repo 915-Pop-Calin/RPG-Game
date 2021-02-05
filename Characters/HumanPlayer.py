@@ -1,4 +1,6 @@
+from Abilities.HumanAbilities.BlindingRage import BlindingRage
 from Abilities.HumanAbilities.Bolster import Bolster
+from Abilities.HumanAbilities.Discourage import Discourage
 from Abilities.HumanAbilities.Strengthen import Strengthen
 from Abilities.HumanAbilities.Taunt import Taunt
 from Characters.Character import Character
@@ -19,14 +21,15 @@ from Items.Weapons.Words import Words
 
 class HumanPlayer(Character):
     def __init__(self, name):
-        #super().__init__(name, 3, 0, ToyKnife(), WornBandage(), 20)
-        super().__init__(name, 3, 0, TacosWhisper(), WornBandage(), 20)
+        super().__init__(name, 3, 0, ToyKnife(), WornBandage(), 20)
         self.__level = 1
         self.__inventory = [None, None, None, None, None, None, None, None]
         self.ids = {100: HealthPotion, 200: ToyKnife, 201: Eclipse, 202: LanguageHacker, 203: TacosWhisper, 204: Words, 300: WornBandage, 301: Cloth, 302: TemArmor}
         self.add_ability("taunt", self.taunt)
         self.add_ability("bolster", self.bolster)
         self.add_ability("strengthen", self.strengthen)
+        self.abilities_to_learn = {2: BlindingRage(), 3: Discourage()}
+        self.respective_abilities = {"blindingrage": self.blinding_rage, "discourage": self.discourage}
 
     def find_nonempty_position_in_inventory(self):
         for index in range(len(self.__inventory)):
@@ -73,10 +76,26 @@ class HumanPlayer(Character):
         string = ability.cast(self, opponent, list_of_turns, turn_counter)
         return string
 
+    def blinding_rage(self,  opponent, list_of_turns, turn_counter):
+        ability = BlindingRage()
+        string = ability.cast(self, opponent, list_of_turns, turn_counter)
+        return string
+
+    def discourage(self, opponent, list_of_turns, turn_counter):
+        pass
+
     def level_up(self):
         self.__level += 1
         self._health += 5
         self._max_health += 5
+        self.new_ability()
+
+    def new_ability(self):
+        ability = type(self.abilities_to_learn[self.__level]).__name__
+        ability = ability.lower()
+        effect = self.respective_abilities[ability]
+        string = self.learn_ability(ability, effect)
+        print(string)
 
     def get_level(self):
         return self.__level
@@ -98,9 +117,10 @@ class HumanPlayer(Character):
         self._weapon = weapon
         self._armor = armour
         self._health = health
-        self._level = level
+        self.__level = level
         self.__inventory = inventory
         self.re_set_attack_health()
+        self._max_health += 5 * self.__level
 
     def save_level_and_status(self, level, filename):
         saved_level = level
@@ -108,6 +128,7 @@ class HumanPlayer(Character):
         attack = self._innate_attack
         defense = self._innate_defense
         weapon = self._weapon.get_id()
+        level_player = self.__level
         armour = self._armor.get_id()
         health = self._health
         inventory = []
@@ -118,7 +139,7 @@ class HumanPlayer(Character):
                 inventory.append(element.get_id())
 
         with open(filename, 'w') as file:
-            line = str(saved_level) + ";" + str(name) + ";" + str(attack) + ";" + str(defense) + ";" + str(weapon) + ";" + str(armour) + ";" + str(health) + ";"
+            line = str(saved_level) + ";" + str(name) + ";" + str(attack) + ";" + str(defense) + ";" + str(weapon) + ";" + str(armour) + ";" + str(health) + ";" + str(level_player) + ";"
             for index in range (len(inventory)):
                 line += str(inventory[index])
                 if index != len(inventory) - 1:
@@ -141,11 +162,16 @@ class HumanPlayer(Character):
             health = float(line[6])
             level = int(line[7])
             inventory = []
-        for index in range(7, 15):
+        for index in range(8, 16):
             if int(line[index]) == 0:
                 inventory.append(None)
             else:
                 inventory.append(self.ids[int(line[index])]())
+        for index in range (2, saved_level + 1):
+            classname = self.abilities_to_learn[index]
+            classname = type(classname).__name__
+            classname = classname.lower()
+            self.add_ability(classname, self.respective_abilities[classname])
         self.set_up(name, attack, defense, weapon, armour, health, level, inventory)
         return saved_level
 
@@ -153,3 +179,6 @@ class HumanPlayer(Character):
         self.add_ability(ability_name, ability_efect)
         string = str(ability_name) + " has been learnt!\n"
         return string
+
+    def print_lvl(self):
+        print(self.__level)
