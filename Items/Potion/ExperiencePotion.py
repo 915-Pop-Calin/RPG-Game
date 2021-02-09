@@ -8,9 +8,11 @@ class ExperiencePotion(Potion):
 
     def use(self, human_player):
         human_player.level_up()
+        string = "You leveled up to level " + str(human_player.get_level()) + " !\n"
+        return string
 
     def __str__(self):
-        return "Experience Potion: LEVEL UP INSTANTLY"
+        return "ExperiencePotion: LEVEL UP INSTANTLY"
 
     def get_id(self):
         return 101

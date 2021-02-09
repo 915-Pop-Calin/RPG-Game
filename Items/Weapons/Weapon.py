@@ -4,6 +4,8 @@ class Weapon:
         self.__defense = defense
         self.__life_steal = None
         self.__effect = None
+        self._dot_effect = None
+        self._crit_chance = 0
 
     def has_effect(self):
         return self.__effect
@@ -25,3 +27,12 @@ class Weapon:
 
     def set_life_steal(self, value):
         self.__life_steal = value
+
+    def set_dot_effect(self, list):
+        self._dot_effect = list
+
+    def get_dot_effect(self):
+        return self._dot_effect
+
+    def get_crit_chance(self):
+        return self._crit_chance

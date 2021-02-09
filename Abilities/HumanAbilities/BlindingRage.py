@@ -4,6 +4,7 @@ from Abilities.Ability import Ability
 class BlindingRage(Ability):
     def __init__(self):
         super().__init__()
+        self._description = "your attack doubles while your defense is halved for 3 turns\ndoes not stack with itself\n"
 
     def cast(self, caster, opponent, list_of_turns, turn_counter):
         print(caster.get_attack_value())

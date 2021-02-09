@@ -1,4 +1,5 @@
 from CombatSystem.Combat import Combat
+from Exceptions.exceptions import CastingError
 
 
 class HumanCombat(Combat):
@@ -9,10 +10,14 @@ class HumanCombat(Combat):
         invalid_input = True
         while invalid_input:
             command = input("your command is:\n")
+            command = command.lower().strip()
             if command in self._options:
-                string = self._options[command](computer_player, self._list_of_turns, self._turn_counter)
-                print(string)
-                invalid_input = False
+                try:
+                    string = self._options[command](computer_player, self._list_of_turns, self._turn_counter)
+                    print(string)
+                    invalid_input = False
+                except CastingError as CE:
+                    print(str(CE))
             elif command == "check stats":
                 print(computer_player.print_stats())
             elif command == "equip item":

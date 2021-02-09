@@ -6,10 +6,12 @@ class Character:
         self._name = name
         self._innate_attack = innate_attack
         self._innate_defense = innate_defense
+        self._innate_crit_chance = 0.15
         self._weapon = weapon
         self._armor = armor
         self._attack = self._innate_attack + self._weapon.attack_value() + self._armor.attack_value()
         self._defense = self._innate_defense + self._weapon.defense_value() + self._armor.defense_value()
+        self._crit_chance = self._innate_crit_chance + self._weapon.get_crit_chance()
         self._health = health
         self._max_health = self._health
         self._description = description
@@ -19,7 +21,9 @@ class Character:
         self._saved_attack = self._attack
         self._saved_armor = self._defense
         self._stunned = False
-
+        self._dot_effects = []
+        self._sanity = 100
+        self._is_autoattacker = True
 
     def set_defense_and_armour_to_normal(self):
         self._attack = self._saved_attack
@@ -30,6 +34,9 @@ class Character:
 
     def set_defense_value(self, value):
         self._defense = value
+
+    def set_hp(self, value):
+        self._health = value
 
     def get_saved_attack(self):
         return self._saved_attack
@@ -42,6 +49,7 @@ class Character:
         self._defense = self._innate_defense + self._weapon.defense_value() + self._armor.defense_value()
         self._saved_armor = self._defense
         self._saved_attack = self._attack
+        self._crit_chance = self._innate_crit_chance + self._weapon.get_crit_chance()
 
     def decrease_attack_value(self, value):
         self._attack = max(0, self._attack - value)
@@ -90,30 +98,35 @@ class Character:
         return string
 
     def hit(self, opponent, list_of_turns, turn_counter):
-        critical = random.randint(1, 5)
-        if critical == 1:
-            damage = self.critical_attack(opponent)
-            health = round(opponent.get_hp(), 2)
-
-            health_2 = str(health)
-            opponent_name = str(opponent.get_name())
-            string = "CRITICAL HIT! " + str(round(damage,2)) + " damage done to " + opponent_name + "!\n"
-            string += opponent_name + " is left with " + health_2 + " health!\n"
-
-
+        critical = random.randint(1, 100)
+        opponent_armor = opponent.get_armor()
+        dodge_chance = opponent_armor.get_dodge()
+        odds = dodge_chance * 100
+        random_choice = random.randint(1, 100)
+        if dodge_chance != 0 and random_choice <= odds:
+                string = opponent.get_name() + " dodged your attack!\n"
         else:
-            damage = self.attack(opponent)
-            string = str(round(damage, 2)) + " damage done to " + opponent.get_name() + "!\n"
-            string += opponent.get_name() + " is left with " + str(round(opponent.get_hp(), 2)) + " health!\n"
-        if self._weapon.has_effect() is not None:
-            new_string = self._weapon.effect(damage, self, opponent)
-            string += new_string
-        if self._weapon.get_life_steal() is not None:
-            lifesteal_string = self.life_steal(damage)
-            string += lifesteal_string
-        if self._armor.has_effect() is not None:
-            new_string = self._armor.effect(damage, self, opponent)
-            string += new_string
+            if critical <= self._crit_chance * 100:
+                damage = self.critical_attack(opponent)
+                health = round(opponent.get_hp(), 2)
+                health_2 = str(health)
+                opponent_name = str(opponent.get_name())
+                string = "CRITICAL HIT! " + str(round(damage,2)) + " damage done to " + opponent_name + "!\n"
+                string += opponent_name + " is left with " + health_2 + " health!\n"
+
+            else:
+                damage = self.attack(opponent)
+                string = str(round(damage, 2)) + " damage done to " + opponent.get_name() + "!\n"
+                string += opponent.get_name() + " is left with " + str(round(opponent.get_hp(), 2)) + " health!\n"
+            if self._weapon.has_effect() is not None:
+                new_string = self._weapon.effect(damage, self, opponent)
+                string += new_string
+            if self._weapon.get_life_steal() is not None:
+                lifesteal_string = self.life_steal(damage)
+                string += lifesteal_string
+            if self._armor.has_effect() is not None:
+                new_string = self._armor.effect(damage, self, opponent)
+                string += new_string
         return string
 
     def get_name(self):
@@ -154,6 +167,9 @@ class Character:
     def get_attack_value(self):
         return self._attack
 
+    def get_defense_value(self):
+        return self._defense
+
     def stun(self):
         self._stunned = True
 
@@ -162,3 +178,29 @@ class Character:
 
     def unstun(self):
         self._stunned = False
+
+    def add_dot_effect(self, list):
+        self._dot_effects.append(list.copy())
+
+    def remove_turn_dot(self, index):
+        self._dot_effects[index][1] -= 1
+        if self._dot_effects[index][1] == 0:
+            self._dot_effects.remove(self._dot_effects[index])
+
+    def get_dot_effects(self):
+        return self._dot_effects
+
+    def reduce_sanity(self, value):
+        self._sanity -= value
+
+    def get_sanity(self):
+        return self._sanity
+
+    def restore_sanity(self, value):
+        self._sanity = min(self._sanity + value, 100)
+
+    def is_autoattacker(self):
+        return self._is_autoattacker
+
+    def clear_dot_effects(self):
+        self._dot_effects = []

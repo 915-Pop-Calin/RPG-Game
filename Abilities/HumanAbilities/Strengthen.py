@@ -4,7 +4,7 @@ from Abilities.Ability import Ability
 class Strengthen(Ability):
     def __init__(self):
         super().__init__()
-        self.__turns = 2
+        self._description = "your attack and defense are increased for 3 turns\nstacks with itself\n"
 
     def cast(self, caster, opponent, list_of_turns, turn_counter):
         difference = caster.get_level() * 2

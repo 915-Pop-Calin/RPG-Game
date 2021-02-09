@@ -3,6 +3,7 @@ class Armour:
         self.__attack = attack
         self.__defense = defense
         self.__effect = None
+        self.__dodge = 0
 
     def attack_value(self):
         return self.__attack
@@ -18,3 +19,9 @@ class Armour:
 
     def __str__(self):
         return str(type(self).__name__) + " ARMOUR: " + str(self.__attack) + " ATTACK, " + str(self.__defense) + " DEFENSE"
+
+    def get_dodge(self):
+        return self.__dodge
+
+    def set_dodge(self, value):
+        self.__dodge = value

@@ -1,19 +1,30 @@
 from Abilities.HumanAbilities.BlindingRage import BlindingRage
 from Abilities.HumanAbilities.Bolster import Bolster
+from Abilities.HumanAbilities.CleanseDOT import CleanseDOT
 from Abilities.HumanAbilities.Discourage import Discourage
+from Abilities.HumanAbilities.Focus import Focus
 from Abilities.HumanAbilities.Strengthen import Strengthen
 from Abilities.HumanAbilities.Taunt import Taunt
 from Characters.Character import Character
-from Exceptions.exceptions import PickingError, ItemError
+from Exceptions.exceptions import PickingError, ItemError, ShoppingError
 from Items.Armors.Armour import Armour
 from Items.Armors.Bandage import WornBandage
+from Items.Armors.BootsOfDodge import BootsOfDodge
 from Items.Armors.Cloth import Cloth
+from Items.Armors.SteelPlateau import SteelPlateau
 from Items.Armors.TemArmor import TemArmor
+from Items.Potion.ExperiencePotion import ExperiencePotion
+from Items.Potion.GrainOfSalt import GrainOfSalt
 from Items.Potion.HealthPotion import HealthPotion
 from Items.Potion.Potion import Potion
+from Items.Potion.SanityPotion import SanityPotion
+from Items.Weapons.BoilingBlood import BoilingBlood
 from Items.Weapons.Eclipse import Eclipse
+from Items.Weapons.IcarusesTouch import IcarusesTouch
+from Items.Weapons.InfinityEdge import InfinityEdge
 from Items.Weapons.LanguageHacker import LanguageHacker
 from Items.Weapons.TacosWhisper import TacosWhisper
+from Items.Weapons.TankBuster import TankBuster
 from Items.Weapons.ToyKnife import ToyKnife
 from Items.Weapons.Weapon import Weapon
 from Items.Weapons.Words import Words
@@ -21,15 +32,22 @@ from Items.Weapons.Words import Words
 
 class HumanPlayer(Character):
     def __init__(self, name):
-        super().__init__(name, 3, 0, ToyKnife(), WornBandage(), 20)
+        #super().__init__(name, 3, 0, ToyKnife(), WornBandage(), 20)
+        #super().__init__(name, 3, 0, TankBuster(), BootsOfDodge(), 1000)
+        super().__init__(name, 3, 0, InfinityEdge(), BootsOfDodge(), 1000)
         self.__level = 1
         self.__inventory = [None, None, None, None, None, None, None, None]
-        self.ids = {100: HealthPotion, 200: ToyKnife, 201: Eclipse, 202: LanguageHacker, 203: TacosWhisper, 204: Words, 300: WornBandage, 301: Cloth, 302: TemArmor}
+        self.ids = {100: HealthPotion, 101: ExperiencePotion, 102: GrainOfSalt, 103: SanityPotion, 200: ToyKnife, 201: Eclipse, 202: LanguageHacker,
+                    203: TacosWhisper, 204: Words, 205: BoilingBlood, 206: IcarusesTouch, 207: TankBuster, 208: InfinityEdge,
+                    300: WornBandage, 301: Cloth, 302: TemArmor, 303: SteelPlateau, 304: BootsOfDodge}
         self.add_ability("taunt", self.taunt)
         self.add_ability("bolster", self.bolster)
         self.add_ability("strengthen", self.strengthen)
-        self.abilities_to_learn = {2: BlindingRage(), 3: Discourage()}
-        self.respective_abilities = {"blindingrage": self.blinding_rage, "discourage": self.discourage}
+        self.abilities_to_learn = {2: BlindingRage(), 3: Discourage(), 4: Focus(), 5: CleanseDOT()}
+        self.respective_abilities = {"blindingrage": self.blinding_rage, "discourage": self.discourage, "focus": self.focus,
+                                     "cleansedot": self.cleanse_DOT}
+        self._ability_list = [Taunt(), Bolster(), Strengthen()]
+        self._gold = 0
 
     def find_nonempty_position_in_inventory(self):
         for index in range(len(self.__inventory)):
@@ -43,23 +61,38 @@ class HumanPlayer(Character):
             raise PickingError("Cannot pick up, inventory full")
         self.__inventory[index] = item
 
-    def use_item(self, item_index):
-        if item_index < 0 or item_index > len(self.__inventory):
+    def find_inventory_by_name(self, item_name):
+        if item_name == "NoneType":
+            return -1
+        for index in range(len(self.__inventory)):
+            if type(self.__inventory[index]).__name__.lower().strip() == item_name.lower().strip():
+                return index
+        return -1
+
+    def use_item(self, item_name):
+        item_index = self.find_inventory_by_name(item_name)
+        if item_index == -1:
             raise ItemError("Invalid Item!")
         item = self.__inventory[item_index]
-        if item is None:
-            raise ItemError("Invalid Item!")
+        string = ""
         if isinstance(item, Weapon):
+            string += "You have equipped " + type(self.__inventory[item_index]).__name__ + "!\n"
             old_weapon = self.change_weapon(item)
             self.__inventory[item_index] = old_weapon
             self.re_set_attack_health()
+
         if isinstance(item, Armour):
+            string += "You have equipped " + type(self.__inventory[item_index]).__name__ + "!\n"
             old_armour = self.change_armour(item)
             self.__inventory[item_index] = old_armour
             self.re_set_attack_health()
+
         if isinstance(item, Potion):
+            string += "You have consumed a " + type(self.__inventory[item_index]).__name__ + "!\n"
             self.__inventory[item_index] = None
-            item.use(self)
+            string += item.use(self)
+
+        return string
 
     def taunt(self, opponent, list_of_turns, turn_counter):
         ability = Taunt()
@@ -82,7 +115,19 @@ class HumanPlayer(Character):
         return string
 
     def discourage(self, opponent, list_of_turns, turn_counter):
-        pass
+        ability = Discourage()
+        string = ability.cast(self, opponent, list_of_turns, turn_counter)
+        return string
+
+    def focus(self, opponent, list_of_turns, turn_counter):
+        ability = Focus()
+        string = ability.cast(self, opponent, list_of_turns, turn_counter)
+        return string
+
+    def cleanse_DOT(self, opponent, list_of_turns, turn_counter):
+        ability = CleanseDOT()
+        string = ability.cast(self, opponent, list_of_turns, turn_counter)
+        return string
 
     def level_up(self):
         self.__level += 1
@@ -91,10 +136,12 @@ class HumanPlayer(Character):
         self.new_ability()
 
     def new_ability(self):
-        ability = type(self.abilities_to_learn[self.__level]).__name__
+        ability_to_learn = self.abilities_to_learn[self.__level]
+        ability = type(ability_to_learn).__name__
         ability = ability.lower()
         effect = self.respective_abilities[ability]
         string = self.learn_ability(ability, effect)
+        self._ability_list.append(ability_to_learn)
         print(string)
 
     def get_level(self):
@@ -110,7 +157,7 @@ class HumanPlayer(Character):
                 string += "\n"
         return string
 
-    def set_up(self, name, attack, defense, weapon, armour, health, level, inventory):
+    def set_up(self, name, attack, defense, weapon, armour, health, level, gold, inventory):
         self._name = name
         self._innate_attack = attack
         self._innate_defense = defense
@@ -121,6 +168,7 @@ class HumanPlayer(Character):
         self.__inventory = inventory
         self.re_set_attack_health()
         self._max_health += 5 * self.__level
+        self._gold = gold
 
     def save_level_and_status(self, level, filename):
         saved_level = level
@@ -131,6 +179,7 @@ class HumanPlayer(Character):
         level_player = self.__level
         armour = self._armor.get_id()
         health = self._health
+        gold = self._gold
         inventory = []
         for element in self.__inventory:
             if element is None:
@@ -139,7 +188,7 @@ class HumanPlayer(Character):
                 inventory.append(element.get_id())
 
         with open(filename, 'w') as file:
-            line = str(saved_level) + ";" + str(name) + ";" + str(attack) + ";" + str(defense) + ";" + str(weapon) + ";" + str(armour) + ";" + str(health) + ";" + str(level_player) + ";"
+            line = str(saved_level) + ";" + str(name) + ";" + str(attack) + ";" + str(defense) + ";" + str(weapon) + ";" + str(armour) + ";" + str(health) + ";" + str(level_player) + ";" + str(gold) + ";"
             for index in range (len(inventory)):
                 line += str(inventory[index])
                 if index != len(inventory) - 1:
@@ -161,18 +210,20 @@ class HumanPlayer(Character):
             armour = self.ids[armour_id]()
             health = float(line[6])
             level = int(line[7])
+            gold = int(line[8])
             inventory = []
-        for index in range(8, 16):
+        for index in range(9, 17):
             if int(line[index]) == 0:
                 inventory.append(None)
             else:
                 inventory.append(self.ids[int(line[index])]())
         for index in range (2, saved_level + 1):
             classname = self.abilities_to_learn[index]
+            self._ability_list.append(classname)
             classname = type(classname).__name__
             classname = classname.lower()
             self.add_ability(classname, self.respective_abilities[classname])
-        self.set_up(name, attack, defense, weapon, armour, health, level, inventory)
+        self.set_up(name, attack, defense, weapon, armour, health, level, gold, inventory)
         return saved_level
 
     def learn_ability(self, ability_name, ability_efect):
@@ -182,3 +233,20 @@ class HumanPlayer(Character):
 
     def print_lvl(self):
         print(self.__level)
+
+    def print_abilities_description(self):
+        for ability in self._ability_list:
+            print(type(ability).__name__, ":", ability.get_description())
+
+    def gain_gold(self, amount):
+        self._gold += amount
+
+    def buy_item(self, cost, item):
+        if self._gold <= cost:
+            raise ShoppingError("Not Enough Gold To Buy Item!\n")
+        self.pick_up(item)
+        self._gold -= cost
+
+    def print_stats(self):
+        string = str(self._name) + ": " + str(self._health) + " HEALTH, " + str(self._defense) + " DEFENSE, " + str(self._attack) + " ATTACK, " + str(self._gold) + " GOLD, " + str(self.__level) + " LEVEL"
+        return string

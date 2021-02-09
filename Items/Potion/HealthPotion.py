@@ -8,9 +8,11 @@ class HealthPotion(Potion):
 
     def use(self, human_player):
         human_player.heal(self.__healing_value)
+        string = "You have healed for " + str(self.__healing_value) + " !\n"
+        return string
 
     def __str__(self):
-        return "Health Potion: HEAL FOR " + str(self.__healing_value)
+        return "HealthPotion: HEAL FOR " + str(self.__healing_value)
 
     def get_id(self):
         return 100

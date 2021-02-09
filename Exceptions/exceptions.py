@@ -3,3 +3,9 @@ class PickingError(Exception):
 
 class ItemError(Exception):
     pass
+
+class ShoppingError(Exception):
+    pass
+
+class CastingError(Exception):
+    pass
