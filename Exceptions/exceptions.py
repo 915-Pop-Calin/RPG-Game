@@ -9,3 +9,6 @@ class ShoppingError(Exception):
 
 class CastingError(Exception):
     pass
+
+class StunError(Exception):
+    pass

@@ -3,8 +3,9 @@ from Items.Weapons.Weapon import Weapon
 
 class TankBuster(Weapon):
     def __init__(self):
-        super().__init__(30, 0)
+        super().__init__(4, 0)
         self.set_effect()
+        self._description = "Each attack strikes twice.\n"
 
     def effect(self, damage, caster, opponent):
         caster.deal_damage(opponent, damage)

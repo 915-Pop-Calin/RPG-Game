@@ -17,5 +17,5 @@ class Discourage(Ability):
 
     def decast(self, caster, opponent):
         opponent.set_defense_and_armour_to_normal()
-        string = opponent.get_name() + "\b's attack was brought back to normal!\n"
+        string = opponent.get_name() + "'s attack was brought back to normal!\n"
         return string

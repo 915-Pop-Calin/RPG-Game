@@ -1,8 +1,9 @@
 import random
 
-
+from Characters.FinalBoss import FinalBoss
 from CombatSystem.ComputerCombat import ComputerCombat
 from CombatSystem.HumanCombat import HumanCombat
+from CombatSystem.LastBossCombat import LastBossCombat
 
 
 class Combat:
@@ -15,7 +16,10 @@ class Combat:
         self.__turn_counter = 0
         self.__dead = False
         self.__human_combat = HumanCombat(self.__humanPlayer)
-        self.__computer_combat = ComputerCombat(self.__computerPlayer)
+        if not isinstance(self.__computerPlayer, FinalBoss):
+            self.__computer_combat = ComputerCombat(self.__computerPlayer)
+        else:
+            self.__computer_combat = LastBossCombat(self.__computerPlayer)
 
     def print_options(self):
         string = "check stats\nequip item\n"
@@ -36,8 +40,8 @@ class Combat:
             self.print_options()
             self.__human_combat.combat(self.__computerPlayer)
             if self.__computerPlayer.get_hp() <= 0:
-                minimum_gold_to_gain = (self.__turn_counter + 1) * self.__humanPlayer.get_level() * 20
-                maximum_gold_to_gain = (self.__turn_counter + 1) * self.__humanPlayer.get_level() * 40
+                minimum_gold_to_gain = 10 * (self.__turn_counter + 1) * self.__humanPlayer.get_level() + 100
+                maximum_gold_to_gain = 10 * (self.__turn_counter + 1) * self.__humanPlayer.get_level() + 200
                 gold_to_gain = random.randint(minimum_gold_to_gain, maximum_gold_to_gain)
                 self.__humanPlayer.gain_gold(gold_to_gain)
                 print(self.__humanPlayer.get_name(), " has won!\n")

@@ -1,1 +1,5 @@
-3;Cal;3;0;207;304;1010;3;65;100;100;100;101;0;0;0;0
+7;Calin;28;60;212;306;85;7;1727;101;200;203;103;103;102;102;300
+young Calin;13;10;200;300;29.174757281553397;does not want to hurt you
+
+teen Calin;22;40;212;300;55;might want to hurt you
+adult Calin;28;60;212;306;85;wants to MURDER you

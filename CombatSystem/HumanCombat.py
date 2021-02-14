@@ -1,5 +1,5 @@
 from CombatSystem.Combat import Combat
-from Exceptions.exceptions import CastingError
+from Exceptions.exceptions import CastingError, ItemError
 
 
 class HumanCombat(Combat):
@@ -21,10 +21,14 @@ class HumanCombat(Combat):
             elif command == "check stats":
                 print(computer_player.print_stats())
             elif command == "equip item":
-                print(self._player.print_inventory())
-                index = int(input("the index of the item you want to equip: \n"))
-                self._player.use_item(index)
-                invalid_input = False
+                try:
+                    print(self._player.print_inventory())
+                    item = input("the item you want to equip:\n")
+                    string = self._player.use_item(item)
+                    print(string)
+                    invalid_input = False
+                except ItemError as IE:
+                    print(str(IE))
             elif command == "pass":
                 invalid_input = False
             elif command == "print level":

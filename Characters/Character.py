@@ -1,5 +1,37 @@
 import random
 
+from Exceptions.exceptions import StunError
+from Items.Armors.Armour import Armour
+from Items.Armors.Bandage import WornBandage
+from Items.Armors.BootsOfDodge import BootsOfDodge
+from Items.Armors.Cloth import Cloth
+from Items.Armors.EyeOfSauron import EyeOfSauron
+from Items.Armors.FireDeflector import FireDeflector
+from Items.Armors.SaroniteScales import SaroniteScales
+from Items.Armors.Scales import Scales
+from Items.Armors.SteelPlateau import SteelPlateau
+from Items.Armors.TemArmor import TemArmor
+from Items.Armors.TidalArmour import TidalArmour
+from Items.Potion.ExperiencePotion import ExperiencePotion
+from Items.Potion.GrainOfSalt import GrainOfSalt
+from Items.Potion.HealthPotion import HealthPotion
+from Items.Potion.SanityPotion import SanityPotion
+from Items.Weapons.BoilingBlood import BoilingBlood
+from Items.Weapons.Dreams import Dreams
+from Items.Weapons.Eclipse import Eclipse
+from Items.Weapons.IcarusesTouch import IcarusesTouch
+from Items.Weapons.InfinityEdge import InfinityEdge
+from Items.Weapons.LanguageHacker import LanguageHacker
+from Items.Weapons.SaroniteTentacles import SaroniteTentacles
+from Items.Weapons.TacosWhisper import TacosWhisper
+from Items.Weapons.TankBuster import TankBuster
+from Items.Weapons.TheRing import TheRing
+from Items.Weapons.TitansFindings import TitansFindings
+from Items.Weapons.ToyKnife import ToyKnife
+from Items.Weapons.Weapon import Weapon
+from Items.Weapons.Words import Words
+from Items.Weapons.Xalatath import Xalatath
+
 
 class Character:
     def __init__(self, name, innate_attack, innate_defense, weapon, armor, health, description = None):
@@ -9,6 +41,7 @@ class Character:
         self._innate_crit_chance = 0.15
         self._weapon = weapon
         self._armor = armor
+        self._armor_pen = 0
         self._attack = self._innate_attack + self._weapon.attack_value() + self._armor.attack_value()
         self._defense = self._innate_defense + self._weapon.defense_value() + self._armor.defense_value()
         self._crit_chance = self._innate_crit_chance + self._weapon.get_crit_chance()
@@ -20,20 +53,43 @@ class Character:
         self._turn_counter = 0
         self._saved_attack = self._attack
         self._saved_armor = self._defense
+        self._saved_armor_pen = self._armor_pen
         self._stunned = False
         self._dot_effects = []
         self._sanity = 100
         self._is_autoattacker = True
+        self._stun_resistant = False
+        self.ids = {100: HealthPotion, 101: ExperiencePotion, 102: GrainOfSalt, 103: SanityPotion,
+                    200: ToyKnife, 201: Eclipse, 202: LanguageHacker, 203: TacosWhisper, 204: Words, 205: BoilingBlood,
+                    206: IcarusesTouch, 207: TankBuster, 208: InfinityEdge, 209: Dreams, 210: TheRing, 211: TitansFindings, 212: Xalatath,
+                    300: WornBandage, 301: Cloth, 302: TemArmor, 303: SteelPlateau, 304: BootsOfDodge, 305: Scales,
+                    306: EyeOfSauron, 307: TidalArmour, 308: FireDeflector}
 
     def set_defense_and_armour_to_normal(self):
         self._attack = self._saved_attack
         self._defense = self._saved_armor
+        self._armor_pen = self._saved_armor_pen
 
     def set_attack_value(self, value):
         self._attack = value
 
     def set_defense_value(self, value):
         self._defense = value
+
+    def get_innate_attack(self):
+        return self._innate_attack
+
+    def set_innate_attack(self, value):
+        self._innate_attack = value
+        self.re_set_attack_health()
+
+    def set_innate_defense(self, value):
+        self._innate_defense = value
+        self.re_set_attack_health()
+
+    def set_innate_health(self, value):
+        self._health = value
+        self._max_health = value
 
     def set_hp(self, value):
         self._health = value
@@ -44,11 +100,15 @@ class Character:
     def get_saved_armor(self):
         return self._saved_armor
 
+    def get_saved_armor_pen(self):
+        return self._armor_pen
+
     def re_set_attack_health(self):
         self._attack = self._innate_attack + self._weapon.attack_value() + self._armor.attack_value()
         self._defense = self._innate_defense + self._weapon.defense_value() + self._armor.defense_value()
         self._saved_armor = self._defense
         self._saved_attack = self._attack
+        self._saved_armor_pen = self._armor_pen
         self._crit_chance = self._innate_crit_chance + self._weapon.get_crit_chance()
 
     def decrease_attack_value(self, value):
@@ -73,14 +133,18 @@ class Character:
         self._health -= damage_taken
 
     def attack(self, opponent):
-        multiplier = 100 / (100 + opponent.get_armour())
+        armour = opponent.get_armour()
+        counted_armor = armour * (1 - self._armor_pen)
+        multiplier = 100 / (100 + counted_armor)
         damage = self._attack
         damage *= multiplier
         opponent.reduce_hp(damage)
         return damage
 
     def critical_attack(self, opponent):
-        multiplier = 100 / (100 + opponent.get_armour())
+        armour = opponent.get_armour()
+        counted_armor = armour * (1 - self._armor_pen)
+        multiplier = 100 / (100 + counted_armor)
         damage = self._attack
         damage *= multiplier
         damage *= 2
@@ -100,13 +164,18 @@ class Character:
     def hit(self, opponent, list_of_turns, turn_counter):
         critical = random.randint(1, 100)
         opponent_armor = opponent.get_armor()
+        opponent_weapon = opponent.get_weapon()
         dodge_chance = opponent_armor.get_dodge()
         odds = dodge_chance * 100
         random_choice = random.randint(1, 100)
         if dodge_chance != 0 and random_choice <= odds:
                 string = opponent.get_name() + " dodged your attack!\n"
         else:
-            if critical <= self._crit_chance * 100:
+            if isinstance(opponent_weapon, SaroniteTentacles) and not opponent_weapon.is_broken():
+                string = opponent_weapon.take_hit(self._attack)
+            elif isinstance(opponent_armor, SaroniteScales) and not opponent_armor.is_broken():
+                string = opponent_armor.take_hit(self._attack)
+            elif critical <= self._crit_chance * 100:
                 damage = self.critical_attack(opponent)
                 health = round(opponent.get_hp(), 2)
                 health_2 = str(health)
@@ -118,15 +187,15 @@ class Character:
                 damage = self.attack(opponent)
                 string = str(round(damage, 2)) + " damage done to " + opponent.get_name() + "!\n"
                 string += opponent.get_name() + " is left with " + str(round(opponent.get_hp(), 2)) + " health!\n"
-            if self._weapon.has_effect() is not None:
-                new_string = self._weapon.effect(damage, self, opponent)
-                string += new_string
-            if self._weapon.get_life_steal() is not None:
-                lifesteal_string = self.life_steal(damage)
-                string += lifesteal_string
-            if self._armor.has_effect() is not None:
-                new_string = self._armor.effect(damage, self, opponent)
-                string += new_string
+                if self._weapon.has_effect() is not None:
+                    new_string = self._weapon.effect(damage, self, opponent)
+                    string += new_string
+                if self._weapon.get_life_steal() is not None:
+                    lifesteal_string = self.life_steal(damage)
+                    string += lifesteal_string
+                if self._armor.has_effect() is not None:
+                    new_string = self._armor.effect(damage, self, opponent)
+                    string += new_string
         return string
 
     def get_name(self):
@@ -171,6 +240,8 @@ class Character:
         return self._defense
 
     def stun(self):
+        if self._stun_resistant:
+            raise StunError("Cannot stun a Stun Resistant target!\n")
         self._stunned = True
 
     def isStunned(self):
@@ -190,6 +261,13 @@ class Character:
     def get_dot_effects(self):
         return self._dot_effects
 
+    def decrease_dot_effects(self, value):
+        for index in range(len(self._dot_effects)):
+            self._dot_effects[index][0] = max(1, self._dot_effects[index][0] - value)
+
+    def get_max_hp(self):
+        return self._max_health
+
     def reduce_sanity(self, value):
         self._sanity -= value
 
@@ -204,3 +282,54 @@ class Character:
 
     def clear_dot_effects(self):
         self._dot_effects = []
+
+    def get_armour_pen(self):
+        return self._armor_pen
+
+    def set_armour_pen(self, value):
+        self._armor_pen = value
+
+    def increase_armour_pen(self, value):
+        self._armor_pen = min(self._armor_pen + value, 1)
+
+    def set_stun_resistant(self, boolean):
+        self._stun_resistant = boolean
+
+    def delete_options(self):
+        self._options = {"attack": self.hit}
+
+    def save_character(self, filename):
+        name = self._name
+        attack = self._innate_attack
+        defense = self._innate_defense
+        weapon = self._weapon.get_id()
+        armour = self._armor.get_id()
+        health = self._health
+        description = self._description
+        with open(filename, "a") as file:
+            line = str(name) + ";" + str(attack) + ";" + str(defense) + ";" + str(weapon) + ";" + str(armour) + ";" + str(health) + ";" + str(description)
+            line += "\n"
+            file.write(line)
+
+    def load_character(self, filename, line_counter):
+        with open(filename, 'r') as file:
+            lines = file.readlines()
+            line = lines[line_counter]
+            line = line.split(";")
+            name = line[0]
+            attack = int(line[1])
+            defense = int(line[2])
+            weapon_id = int(line[3])
+            weapon = self.ids[weapon_id]()
+            armor_id = int(line[4])
+            armor = self.ids[armor_id]()
+            health = float(line[5])
+            description = line[6]
+            chara = Character(name, attack, defense, weapon, armor, health, description)
+            return chara
+
+    def direct_equip(self, item):
+        if isinstance(item, Weapon):
+            self._weapon = item
+        if isinstance(item, Armour):
+            self._armor = item

@@ -1,3 +1,3 @@
 class Potion:
     def __init__(self):
-        pass
+        self._description = None

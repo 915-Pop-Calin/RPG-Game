@@ -6,6 +6,7 @@ class Weapon:
         self.__effect = None
         self._dot_effect = None
         self._crit_chance = 0
+        self._description = None
 
     def has_effect(self):
         return self.__effect
@@ -20,7 +21,10 @@ class Weapon:
         return self.__defense
 
     def __str__(self):
-        return str(type(self).__name__) + " WEAPON: " + str(self.__attack) + " ATTACK, " + str(self.__defense) + " DEFENSE"
+        string = str(type(self).__name__) + " WEAPON: " + str(self.__attack) + " ATTACK, " + str(self.__defense) + " DEFENSE"
+        if self._description is not None:
+            string += ", " + self._description
+        return string
 
     def get_life_steal(self):
         return self.__life_steal
@@ -36,3 +40,9 @@ class Weapon:
 
     def get_crit_chance(self):
         return self._crit_chance
+
+    def increment_attack_value(self):
+        self.__attack += 1
+
+    def set_attack(self, value):
+        self.__attack = value

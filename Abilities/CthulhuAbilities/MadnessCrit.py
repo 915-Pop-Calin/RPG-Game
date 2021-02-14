@@ -12,5 +12,6 @@ class MadnessCrit(Ability):
         enhancer = 1 + 2 * percentage_missing
         attack_value = caster.get_attack_value()
         string = opponent.get_name() + " has taken " + str(attack_value * enhancer) + " True Damage due to its missing sanity!\n"
+        string += opponent.get_name() + " is left with " + str(opponent.get_hp()) + " health!\n"
         opponent.reduce_hp(attack_value * enhancer)
         return string

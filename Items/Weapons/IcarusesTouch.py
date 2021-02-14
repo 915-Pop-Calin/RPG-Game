@@ -6,6 +6,7 @@ class IcarusesTouch(Weapon):
         super().__init__(0, 0)
         self.set_dot_effect([3, 5])
         self.set_effect()
+        self._description = "Very strong DOTer.\n"
 
     def effect(self, damage, caster, opponent):
         opponent.add_dot_effect(self._dot_effect)

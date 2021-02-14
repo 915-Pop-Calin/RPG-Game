@@ -5,8 +5,9 @@ from Items.Weapons.Weapon import Weapon
 
 class LanguageHacker(Weapon):
     def __init__(self):
-        super().__init__(0, 0)
+        super().__init__(10, 0)
         self.set_effect()
+        self._description = "After each attack, you gain a GrainOfSalt.\n"
 
     def effect(self, damage, caster, opponent):
         try:

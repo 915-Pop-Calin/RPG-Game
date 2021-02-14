@@ -4,6 +4,7 @@ class Armour:
         self.__defense = defense
         self.__effect = None
         self.__dodge = 0
+        self._description = None
 
     def attack_value(self):
         return self.__attack
@@ -17,8 +18,14 @@ class Armour:
     def defense_value(self):
         return self.__defense
 
+    def set_defense(self, value):
+        self.__defense = value
+
     def __str__(self):
-        return str(type(self).__name__) + " ARMOUR: " + str(self.__attack) + " ATTACK, " + str(self.__defense) + " DEFENSE"
+        string = str(type(self).__name__) + " ARMOUR: " + str(self.__attack) + " ATTACK, " + str(self.__defense) + " DEFENSE "
+        if self._description is not None:
+            string += "," + self._description
+        return string
 
     def get_dodge(self):
         return self.__dodge

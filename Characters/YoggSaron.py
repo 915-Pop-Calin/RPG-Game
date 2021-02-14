@@ -8,7 +8,7 @@ from Items.Weapons.BoilingBlood import BoilingBlood
 
 class YoggSaron(Character):
     def __init__(self):
-        super().__init__("Yogg Saron", math.inf, math.inf, BoilingBlood(), BootsOfDodge(), math.inf)
+        super().__init__("Yogg Saron", math.inf, math.inf, BoilingBlood(), BootsOfDodge(), math.inf, "The God Of Death")
         self._discourage_counter = 3
 
     def set_attack_value(self, value):
@@ -26,6 +26,7 @@ class YoggSaron(Character):
         self._innate_attack = 10
         self._innate_defense = 100
         self._health = 100
+        self._description = "A manifestation of the God of Death"
         self.re_set_attack_health()
         self._options = {"madness": self.madness}
         self._is_autoattacker = False

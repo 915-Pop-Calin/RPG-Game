@@ -5,3 +5,7 @@ class InfinityEdge(Weapon):
     def __init__(self):
         super().__init__(20, 0)
         self._crit_chance = 0.35
+        self._description = "Increases your critical strike chance by 35%.\n"
+
+    def get_id(self):
+        return 208

@@ -5,6 +5,7 @@ class ExperiencePotion(Potion):
     def __init__(self):
         super().__init__()
         self.__level = 1
+        self._description = "Helps you get abilities quicker.\n"
 
     def use(self, human_player):
         human_player.level_up()
@@ -12,7 +13,7 @@ class ExperiencePotion(Potion):
         return string
 
     def __str__(self):
-        return "ExperiencePotion: LEVEL UP INSTANTLY"
+        return "ExperiencePotion: LEVEL UP INSTANTLY, " + self._description
 
     def get_id(self):
         return 101
