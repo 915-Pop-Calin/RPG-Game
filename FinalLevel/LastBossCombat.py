@@ -1,5 +1,5 @@
 from CombatSystem.Combat import Combat
-from Items.Weapons.OrbOfTheTitans import OrbOfTheTitans
+from FinalLevel.OrbOfTheTitans import OrbOfTheTitans
 
 
 class LastBossCombat(Combat):

@@ -1,6 +1,4 @@
 import random
-
-from Characters.YoggSaron import YoggSaron
 from CombatSystem.Combat import Combat
 
 

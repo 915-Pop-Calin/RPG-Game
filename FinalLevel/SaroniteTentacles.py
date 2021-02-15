@@ -5,6 +5,7 @@ class SaroniteTentacles(Weapon):
         super().__init__(20, 0)
         self._health = 100
         self.__broken = False
+        self.set_reflector()
 
     def take_hit(self, damage):
         self._health -= damage

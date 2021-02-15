@@ -1,7 +1,7 @@
 from Abilities.CthulhuAbilities.MadnessCrit import MadnessCrit
 from Abilities.CthulhuAbilities.TripleHit import TripleHit
 from Characters.Character import Character
-from Items.Armors.Scales import Scales
+from Items.Armors.LevelFour.Scales import Scales
 from Items.Weapons.Dreams import Dreams
 
 

@@ -1,42 +1,43 @@
 from Exceptions.exceptions import ShoppingError
-
-from Items.Armors.Bandage import WornBandage
-from Items.Armors.BootsOfDodge import BootsOfDodge
-from Items.Armors.Cloth import Cloth
-from Items.Armors.EyeOfSauron import EyeOfSauron
-from Items.Armors.FireDeflector import FireDeflector
-from Items.Armors.Scales import Scales
-from Items.Armors.SteelPlateau import SteelPlateau
-from Items.Armors.TemArmor import TemArmor
-from Items.Armors.TidalArmour import TidalArmour
-from Items.Potion.GrainOfSalt import GrainOfSalt
-from Items.Potion.Potion import Potion
+from Items.Armors.LevelFive.EyeOfSauron import EyeOfSauron
+from Items.Armors.LevelFour.FireDeflector import FireDeflector
+from Items.Armors.LevelFour.Scales import Scales
+from Items.Armors.LevelFour.TidalArmour import TidalArmour
+from Items.Armors.LevelOne.Cloth import Cloth
+from Items.Armors.LevelOne.TemArmor import TemArmor
+from Items.Armors.LevelThree.BootsOfDodge import BootsOfDodge
+from Items.Armors.LevelTwo.SteelPlateau import SteelPlateau
+from Items.Potion.DefensePotion import DefensePotion
 from Items.Potion.ExperiencePotion import ExperiencePotion
+from Items.Potion.GrainOfSalt import GrainOfSalt
 from Items.Potion.HealthPotion import HealthPotion
-from Items.Weapons.BoilingBlood import BoilingBlood
-from Items.Weapons.Eclipse import Eclipse
-from Items.Weapons.IcarusesTouch import IcarusesTouch
-from Items.Weapons.InfinityEdge import InfinityEdge
-from Items.Weapons.LanguageHacker import LanguageHacker
-from Items.Weapons.TacosWhisper import TacosWhisper
-from Items.Weapons.TankBuster import TankBuster
-from Items.Weapons.TheRing import TheRing
-from Items.Weapons.TitansFindings import TitansFindings
-from Items.Weapons.ToyKnife import ToyKnife
-from Items.Weapons.Words import Words
-from Items.Weapons.Xalatath import Xalatath
+from Items.Potion.OffensivePotion import OffensePotion
+from Items.Potion.Potion import Potion
+from Items.Weapons.LevelFive.InfinityEdge import InfinityEdge
+from Items.Weapons.LevelFive.RadusBiceps import RadusBiceps
+from Items.Weapons.LevelFour.IcarusesTouch import IcarusesTouch
+from Items.Weapons.LevelOne.Eclipse import Eclipse
+from Items.Weapons.LevelOne.ToyKnife import ToyKnife
+from Items.Weapons.LevelOne.Words import Words
+from Items.Weapons.LevelSix.TheRing import TheRing
+from Items.Weapons.LevelThree.BoilingBlood import BoilingBlood
+from Items.Weapons.LevelThree.LanguageHacker import LanguageHacker
+from Items.Weapons.LevelThree.TankBuster import TankBuster
+from Items.Weapons.LevelThree.Xalatath import Xalatath
+from Items.Weapons.LevelTwo.TacosWhisper import TacosWhisper
+from Items.Weapons.LevelTwo.TitansFindings import TitansFindings
 
 
 class Shop:
     def __init__(self, human_player, level):
         self._human_player = human_player
         self._level = level
-        self._universal_option = [[HealthPotion(), 10], [ExperiencePotion(), 1000], [GrainOfSalt(), 50]]
+        self._universal_option = [[HealthPotion(), 10], [ExperiencePotion(), 1000], [GrainOfSalt(), 50], [DefensePotion(), 100], [OffensePotion(), 100]]
         self._options = {2 : [[TemArmor(), 150], [Cloth(), 100], [Eclipse(), 150], [Words(), 50], [ToyKnife(), 50]],
                          3 : [ [SteelPlateau(), 400], [TacosWhisper(), 500], [TitansFindings(), 500]],
                          4 : [[BootsOfDodge(), 500], [BoilingBlood(), 500], [TankBuster(), 500], [LanguageHacker(), 600], [Xalatath(), 600]],
                          5 : [[Scales(), 200], [IcarusesTouch(), 900], [TidalArmour(), 700], [FireDeflector(), 800]],
-                         6: [[EyeOfSauron(), 1000], [InfinityEdge(), 500]], 7: [[TheRing(), 1500]]}
+                         6: [[EyeOfSauron(), 1000], [InfinityEdge(), 500], [RadusBiceps(), 700]], 7: [[TheRing(), 1500]]}
         self._total_options = []
         for option in self._universal_option:
             self._total_options.append(option)
@@ -63,3 +64,21 @@ class Shop:
         if not isinstance(item[0], Potion):
             self._total_options.remove(self._total_options[index])
         self._human_player.buy_item(item[1], item[0])
+
+    def find_cost_by_class(self, class_name):
+        for option in self._total_options:
+            if type(option[0]).__name__ == type(class_name).__name__:
+                return option[1]
+        return None
+
+    def sell_item(self):
+        for element in self._human_player.get_inventory():
+            if element is not None:
+                print(element, ", GOLD: ", self.find_cost_by_class(element))
+        choice = input("the item you want to sell:\n")
+        choice = choice.lower().strip()
+        for option in self._total_options:
+            if type(option[0]).__name__.lower() == choice:
+                self._human_player.sell_item(option[1], choice)
+                return True
+        raise ShoppingError("Item Cannot Be Found In Shop!\n")

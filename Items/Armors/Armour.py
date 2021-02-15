@@ -5,6 +5,8 @@ class Armour:
         self.__effect = None
         self.__dodge = 0
         self._description = None
+        self._passive = None
+        self._reflector = False
 
     def attack_value(self):
         return self.__attack
@@ -30,5 +32,17 @@ class Armour:
     def get_dodge(self):
         return self.__dodge
 
+    def has_passive(self):
+        return self._passive
+
+    def set_passive(self):
+        self._passive = True
+
     def set_dodge(self, value):
         self.__dodge = value
+
+    def set_reflector(self):
+        self._reflector = True
+
+    def get_reflector(self):
+        return self._reflector

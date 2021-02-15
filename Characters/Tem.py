@@ -3,16 +3,14 @@ import random
 from Abilities.TemAbilities.DoNothing import DoNothing
 from Abilities.TemAbilities.HealTem import HealTem
 from Characters.Character import Character
-from Items.Armors.Cloth import Cloth
-from Items.Armors.SaroniteScales import SaroniteScales
-from Items.Weapons.Eclipse import Eclipse
-from Items.Weapons.SaroniteTentacles import SaroniteTentacles
+from Items.Armors.LevelOne.Cloth import Cloth
+from Items.Weapons.LevelOne.Eclipse import Eclipse
 
 
 class Tem(Character):
     def __init__(self):
         super().__init__("Tem", 1, 100, Eclipse(), Cloth(), 20, "Comes from Temmie Village.")
-        #super().__init__("Tem", -20, 100, SaroniteTentacles(), SaroniteScales(), 20, "Comes from Temmie Village.")
+        #super().__init__("Tem", 20, 100, Eclipse(), Cloth(), 20000, "Comes from Temmie Village.")
         self.add_ability("donothing", self.donothing)
         self.add_ability("healtem", self.healtem)
 

@@ -2,8 +2,8 @@ import math
 
 from Abilities.YoggSaronAbilities.Madness import Madness
 from Characters.Character import Character
-from Items.Armors.BootsOfDodge import BootsOfDodge
-from Items.Weapons.BoilingBlood import BoilingBlood
+from Items.Armors.LevelThree.BootsOfDodge import BootsOfDodge
+from Items.Weapons.LevelThree.BoilingBlood import BoilingBlood
 
 
 class YoggSaron(Character):

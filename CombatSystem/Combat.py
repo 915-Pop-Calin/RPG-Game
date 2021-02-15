@@ -1,7 +1,4 @@
 from Characters.Character import Character
-from Items.Armors.Bandage import WornBandage
-from Items.Weapons.ToyKnife import ToyKnife
-
 
 class Combat:
     def __init__(self, player):
@@ -9,6 +6,13 @@ class Combat:
         self._options = player.get_options()
         self._list_of_turns = {}
         self._turn_counter = 0
+
+    def check_stun(self):
+        if self._player.isStunned():
+            print(self._player.get_name(), "\b's turn was skipped because he was stunned!\n")
+            self._turn_counter += 1
+            return True
+        return False
 
     def check_undos(self, second_player):
         if self._turn_counter in list(self._list_of_turns.keys()):

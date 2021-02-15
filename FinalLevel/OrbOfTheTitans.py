@@ -1,4 +1,4 @@
-from Characters.FinalBoss import FinalBoss
+from FinalLevel.FinalBoss import FinalBoss
 from Items.Weapons.Weapon import Weapon
 
 

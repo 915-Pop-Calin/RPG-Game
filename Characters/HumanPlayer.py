@@ -11,34 +11,15 @@ from Abilities.TemAbilities.DoNothing import DoNothing
 from Characters.Character import Character
 from Exceptions.exceptions import PickingError, ItemError, ShoppingError
 from Items.Armors.Armour import Armour
-from Items.Armors.Bandage import WornBandage
-from Items.Armors.BootsOfDodge import BootsOfDodge
-from Items.Armors.Cloth import Cloth
-from Items.Armors.SteelPlateau import SteelPlateau
-from Items.Armors.TemArmor import TemArmor
-from Items.Potion.ExperiencePotion import ExperiencePotion
-from Items.Potion.GrainOfSalt import GrainOfSalt
-from Items.Potion.HealthPotion import HealthPotion
+from Items.Armors.LevelOne.Bandage import WornBandage
 from Items.Potion.Potion import Potion
-from Items.Potion.SanityPotion import SanityPotion
-from Items.Weapons.BoilingBlood import BoilingBlood
-from Items.Weapons.Eclipse import Eclipse
-from Items.Weapons.IcarusesTouch import IcarusesTouch
-from Items.Weapons.InfinityEdge import InfinityEdge
-from Items.Weapons.LanguageHacker import LanguageHacker
-from Items.Weapons.TacosWhisper import TacosWhisper
-from Items.Weapons.TankBuster import TankBuster
-from Items.Weapons.ToyKnife import ToyKnife
+from Items.Weapons.LevelOne.ToyKnife import ToyKnife
 from Items.Weapons.Weapon import Weapon
-from Items.Weapons.Words import Words
 
 
 class HumanPlayer(Character):
     def __init__(self, name):
         super().__init__(name, 10, 0, ToyKnife(), WornBandage(), 20)
-        #super().__init__(name, 1000, 100, ToyKnife(), WornBandage(), 200)
-        #super().__init__(name, 3, 0, TankBuster(), BootsOfDodge(), 1000)
-        #super().__init__(name, 3, 0, InfinityEdge(), BootsOfDodge(), 1000)
         self.__level = 1
         self.__inventory = [None, None, None, None, None, None, None, None]
         self.add_ability("taunt", self.taunt)
@@ -56,6 +37,9 @@ class HumanPlayer(Character):
             if self.__inventory[index] is None:
                 return index
         return -1
+
+    def get_inventory(self):
+        return self.__inventory
 
     def pick_up(self, item):
         index = self.find_nonempty_position_in_inventory()
@@ -292,8 +276,18 @@ class HumanPlayer(Character):
         self.pick_up(item)
         self._gold -= cost
 
+    def sell_item(self, cost, item):
+        for index in range (len(self.__inventory)):
+            if type(self.__inventory[index]).__name__.lower() == item:
+                self.__inventory[index] = None
+                self._gold += cost
+                return True
+        raise ShoppingError("Item Cannot Be Found In The Inventory!\n")
+
     def print_stats(self):
-        string = str(self._name) + ": " + str(self._health) + " HEALTH, " + str(self._defense) + " DEFENSE, " + str(self._attack) + " ATTACK, " + str(self._gold) + " GOLD, " + str(self.__level) + " LEVEL"
+        string = str(self._name) + ": " + str(self._health) + " HEALTH, " + str(self._defense) + " DEFENSE, " + str(self._attack) + " ATTACK, " + str(self._gold) + " GOLD, " + str(self.__level) + " LEVEL\n"
+        string += str(self._weapon)
+        string += str(self._armor)
         return string
 
     def create_character_copy(self,  new_name, description):

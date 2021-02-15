@@ -1,9 +1,10 @@
 import random
 
-from Characters.FinalBoss import FinalBoss
+
 from CombatSystem.ComputerCombat import ComputerCombat
 from CombatSystem.HumanCombat import HumanCombat
-from CombatSystem.LastBossCombat import LastBossCombat
+from FinalLevel.FinalBoss import FinalBoss
+from FinalLevel.LastBossCombat import LastBossCombat
 
 
 class Combat:
@@ -36,20 +37,21 @@ class Combat:
             self.__combatDone = True
             print(self.__computerPlayer.get_name(), " has won!\n")
         self.__human_combat.check_undos(self.__computerPlayer)
-        if not self.__dead and not self.__combatDone:
-            self.print_options()
-            self.__human_combat.combat(self.__computerPlayer)
-            if self.__computerPlayer.get_hp() <= 0:
-                minimum_gold_to_gain = 10 * (self.__turn_counter + 1) * self.__humanPlayer.get_level() + 100
-                maximum_gold_to_gain = 10 * (self.__turn_counter + 1) * self.__humanPlayer.get_level() + 200
-                gold_to_gain = random.randint(minimum_gold_to_gain, maximum_gold_to_gain)
-                self.__humanPlayer.gain_gold(gold_to_gain)
-                print(self.__humanPlayer.get_name(), " has won!\n")
-                print(self.__humanPlayer.get_name(), " has gained ", str(gold_to_gain), " gold!\n")
-                self.__human_combat.fight_end(self.__computerPlayer)
-                self.__computer_combat.fight_end(self.__humanPlayer)
-                self.__human_combat.post_combat()
-                self.__combatDone = True
+        if not self.__human_combat.check_stun():
+            if not self.__dead and not self.__combatDone:
+                self.print_options()
+                self.__human_combat.combat(self.__computerPlayer)
+                if self.__computerPlayer.get_hp() <= 0:
+                    minimum_gold_to_gain = 10 * (self.__turn_counter + 1) * self.__humanPlayer.get_level() + 100
+                    maximum_gold_to_gain = 10 * (self.__turn_counter + 1) * self.__humanPlayer.get_level() + 200
+                    gold_to_gain = random.randint(minimum_gold_to_gain, maximum_gold_to_gain)
+                    self.__humanPlayer.gain_gold(gold_to_gain)
+                    print(self.__humanPlayer.get_name(), " has won!\n")
+                    print(self.__humanPlayer.get_name(), " has gained ", str(gold_to_gain), " gold!\n")
+                    self.__human_combat.fight_end(self.__computerPlayer)
+                    self.__computer_combat.fight_end(self.__humanPlayer)
+                    self.__human_combat.post_combat()
+                    self.__combatDone = True
         self.__turn = 1
         self.__turn_counter += 1
 
@@ -60,31 +62,23 @@ class Combat:
             self.__combatDone = True
             print(self.__humanPlayer.get_name(), " has won!\n")
         self.__computer_combat.check_undos(self.__humanPlayer)
-        if not self.__combatDone:
-            self.__computer_combat.combat(self.__humanPlayer)
-            if self.__humanPlayer.get_hp() <= 0 or self.__humanPlayer.get_sanity() <= 0:
-                print(self.__computerPlayer.get_name(), " has won!\n")
-                self.__computer_combat.fight_end(self.__humanPlayer)
-                self.__human_combat.fight_end(self.__computerPlayer)
-                self.__dead = True
-                self.__combatDone = True
+        if not self.__computer_combat.check_stun():
+            if not self.__combatDone:
+                self.__computer_combat.combat(self.__humanPlayer)
+                if self.__humanPlayer.get_hp() <= 0 or self.__humanPlayer.get_sanity() <= 0:
+                    print(self.__computerPlayer.get_name(), " has won!\n")
+                    self.__computer_combat.fight_end(self.__humanPlayer)
+                    self.__human_combat.fight_end(self.__computerPlayer)
+                    self.__dead = True
+                    self.__combatDone = True
         self.__turn = 0
 
     def fight(self):
         while not self.__combatDone:
             if self.__turn == 0:
-                if not self.__humanPlayer.isStunned():
-                    self.player_turn()
-                else:
-                    print(self.__humanPlayer.get_name(), "\b's turn was skipped because he was stunned!\n")
-                    self.__turn = 1
+                self.player_turn()
             else:
-                if not self.__computerPlayer.isStunned():
-                    self.computer_turn()
-                else:
-                    print(self.__computerPlayer.get_name(), "\b's turn was skipped because he was stunned!\n")
-                    self.__turn = 0
-
+                self.computer_turn()
 
     def isDead(self):
         return self.__dead

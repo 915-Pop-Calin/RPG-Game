@@ -2,8 +2,8 @@ import math
 import random
 
 from Characters.Character import Character
-from Items.Armors.SaroniteScales import SaroniteScales
-from Items.Weapons.SaroniteTentacles import SaroniteTentacles
+from FinalLevel.SaroniteScales import SaroniteScales
+from FinalLevel.SaroniteTentacles import SaroniteTentacles
 
 
 class FinalBoss(Character):

@@ -3,7 +3,6 @@ import random
 import termcolor
 
 from Characters.Cthulhu import Cthulhu
-from Characters.Deathwing import Deathwing
 from Characters.HumanPlayer import HumanPlayer
 from Characters.Icarus import Icarus
 from Characters.Sauron import Sauron
@@ -13,7 +12,8 @@ from Characters.YoggSaron import YoggSaron
 from Cheats.Cheats import Cheats
 from Combat.Combat import Combat
 from Exceptions.exceptions import ShoppingError, ItemError, PickingError
-from Game.LastLevel import LastLevel
+from FinalLevel.LastLevel import LastLevel
+
 from Items.Potion.ExperiencePotion import ExperiencePotion
 from Items.Potion.GrainOfSalt import GrainOfSalt
 from Items.Potion.HealthPotion import HealthPotion
@@ -59,7 +59,7 @@ class Game:
         self.__shop = Shop(self.__player, self.__level)
         decision = None
         while decision != "next":
-            decision = input("next\nstats\nequip item\ndrop item\nsave\nsee abilities\nshop\nexit\n")
+            decision = input("next\nstats\nequip item\ndrop item\nsave\nsee abilities\nbuy\nsell\nexit\n")
             decision = decision.lower().strip()
             if decision == "stats":
                 print(self.__player.print_stats())
@@ -95,13 +95,18 @@ class Game:
                 break
             elif decision == "see abilities":
                 self.__player.print_abilities_description()
-            elif decision == "shop":
+            elif decision == "buy":
                 try:
                     self.__shop.buy_item()
                 except ShoppingError as PE:
                     print(str(PE))
                 except PickingError as PE:
                     print(str(PE))
+            elif decision == "sell":
+                try:
+                    self.__shop.sell_item()
+                except ShoppingError as SE:
+                    print(str(SE))
             elif decision in self.__cheats.list_of_cheats.keys():
                 string = self.__cheats.list_of_cheats[decision](self)
                 print(string)
@@ -186,8 +191,11 @@ class Game:
                     break
                 self.__in_combat = True
         if self.__level == 7 and not self.__dead and not self.__exit:
-            self.__last_level = LastLevel(self.__player, self.__past_selves)
-            self.__last_level.play_out()
+            if not self.__hasCheated:
+                self.__last_level = LastLevel(self.__player, self.__past_selves)
+                self.__last_level.play_out()
+            else:
+                print("Last level cannot be played because you cheated!\n")
 
     def save(self):
         self.__player.save_level_and_status(self.__level, self.__save_file)

@@ -1,8 +1,8 @@
 from Abilities.IcarusAbilities.Burn import Burn
 from Abilities.IcarusAbilities.BurningWill import BurningWill
 from Characters.Character import Character
-from Items.Armors.SteelPlateau import SteelPlateau
-from Items.Weapons.IcarusesTouch import IcarusesTouch
+from Items.Armors.LevelTwo.SteelPlateau import SteelPlateau
+from Items.Weapons.LevelFour.IcarusesTouch import IcarusesTouch
 
 
 class Icarus(Character):

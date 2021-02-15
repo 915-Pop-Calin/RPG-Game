@@ -1,8 +1,8 @@
 import termcolor
 
-from Characters.FinalBoss import FinalBoss
 from Combat.Combat import Combat
-from Game.GenocideCombat import GenocideCombat
+from FinalLevel.FinalBoss import FinalBoss
+from FinalLevel.GenocideCombat import GenocideCombat
 
 
 class LastLevel:

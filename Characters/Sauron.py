@@ -1,8 +1,8 @@
 from Abilities.SauronAbilities.PowerOfTheEye import PowerOfTheEye
 from Abilities.SauronAbilities.PowerOfTheRing import PowerOfTheRing
 from Characters.Character import Character
-from Items.Armors.EyeOfSauron import EyeOfSauron
-from Items.Weapons.TheRing import TheRing
+from Items.Armors.LevelFive.EyeOfSauron import EyeOfSauron
+from Items.Weapons.LevelSix.TheRing import TheRing
 
 
 class Sauron(Character):

@@ -7,6 +7,7 @@ class SaroniteScales(Armour):
         self._health = 100
         self._description = "Saronite Scales.\n"
         self._broken = False
+        self.set_reflector()
 
     def take_hit(self, attack):
         multiplier = 100 / (100 + self.defense_value())

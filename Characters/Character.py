@@ -2,35 +2,34 @@ import random
 
 from Exceptions.exceptions import StunError
 from Items.Armors.Armour import Armour
-from Items.Armors.Bandage import WornBandage
-from Items.Armors.BootsOfDodge import BootsOfDodge
-from Items.Armors.Cloth import Cloth
-from Items.Armors.EyeOfSauron import EyeOfSauron
-from Items.Armors.FireDeflector import FireDeflector
-from Items.Armors.SaroniteScales import SaroniteScales
-from Items.Armors.Scales import Scales
-from Items.Armors.SteelPlateau import SteelPlateau
-from Items.Armors.TemArmor import TemArmor
-from Items.Armors.TidalArmour import TidalArmour
+from Items.Armors.LevelFive.EyeOfSauron import EyeOfSauron
+from Items.Armors.LevelFour.FireDeflector import FireDeflector
+from Items.Armors.LevelFour.Scales import Scales
+from Items.Armors.LevelFour.TidalArmour import TidalArmour
+from Items.Armors.LevelOne.Bandage import WornBandage
+from Items.Armors.LevelOne.Cloth import Cloth
+from Items.Armors.LevelOne.TemArmor import TemArmor
+from Items.Armors.LevelThree.BootsOfDodge import BootsOfDodge
+from Items.Armors.LevelTwo.SteelPlateau import SteelPlateau
 from Items.Potion.ExperiencePotion import ExperiencePotion
 from Items.Potion.GrainOfSalt import GrainOfSalt
 from Items.Potion.HealthPotion import HealthPotion
 from Items.Potion.SanityPotion import SanityPotion
-from Items.Weapons.BoilingBlood import BoilingBlood
 from Items.Weapons.Dreams import Dreams
-from Items.Weapons.Eclipse import Eclipse
-from Items.Weapons.IcarusesTouch import IcarusesTouch
-from Items.Weapons.InfinityEdge import InfinityEdge
-from Items.Weapons.LanguageHacker import LanguageHacker
-from Items.Weapons.SaroniteTentacles import SaroniteTentacles
-from Items.Weapons.TacosWhisper import TacosWhisper
-from Items.Weapons.TankBuster import TankBuster
-from Items.Weapons.TheRing import TheRing
-from Items.Weapons.TitansFindings import TitansFindings
-from Items.Weapons.ToyKnife import ToyKnife
+from Items.Weapons.LevelFive.InfinityEdge import InfinityEdge
+from Items.Weapons.LevelFive.RadusBiceps import RadusBiceps
+from Items.Weapons.LevelFour.IcarusesTouch import IcarusesTouch
+from Items.Weapons.LevelOne.Eclipse import Eclipse
+from Items.Weapons.LevelOne.ToyKnife import ToyKnife
+from Items.Weapons.LevelOne.Words import Words
+from Items.Weapons.LevelSix.TheRing import TheRing
+from Items.Weapons.LevelThree.BoilingBlood import BoilingBlood
+from Items.Weapons.LevelThree.LanguageHacker import LanguageHacker
+from Items.Weapons.LevelThree.TankBuster import TankBuster
+from Items.Weapons.LevelThree.Xalatath import Xalatath
+from Items.Weapons.LevelTwo.TacosWhisper import TacosWhisper
+from Items.Weapons.LevelTwo.TitansFindings import TitansFindings
 from Items.Weapons.Weapon import Weapon
-from Items.Weapons.Words import Words
-from Items.Weapons.Xalatath import Xalatath
 
 
 class Character:
@@ -41,7 +40,8 @@ class Character:
         self._innate_crit_chance = 0.15
         self._weapon = weapon
         self._armor = armor
-        self._armor_pen = 0
+        self._innate_armor_pen = 0
+        self._armor_pen = self._weapon.get_armor_pen()
         self._attack = self._innate_attack + self._weapon.attack_value() + self._armor.attack_value()
         self._defense = self._innate_defense + self._weapon.defense_value() + self._armor.defense_value()
         self._crit_chance = self._innate_crit_chance + self._weapon.get_crit_chance()
@@ -61,7 +61,8 @@ class Character:
         self._stun_resistant = False
         self.ids = {100: HealthPotion, 101: ExperiencePotion, 102: GrainOfSalt, 103: SanityPotion,
                     200: ToyKnife, 201: Eclipse, 202: LanguageHacker, 203: TacosWhisper, 204: Words, 205: BoilingBlood,
-                    206: IcarusesTouch, 207: TankBuster, 208: InfinityEdge, 209: Dreams, 210: TheRing, 211: TitansFindings, 212: Xalatath,
+                    206: IcarusesTouch, 207: TankBuster, 208: InfinityEdge, 209: Dreams, 210: TheRing, 211: TitansFindings,
+                    212: Xalatath, 213: RadusBiceps,
                     300: WornBandage, 301: Cloth, 302: TemArmor, 303: SteelPlateau, 304: BootsOfDodge, 305: Scales,
                     306: EyeOfSauron, 307: TidalArmour, 308: FireDeflector}
 
@@ -78,6 +79,9 @@ class Character:
 
     def get_innate_attack(self):
         return self._innate_attack
+
+    def get_innate_defense(self):
+        return self._innate_defense
 
     def set_innate_attack(self, value):
         self._innate_attack = value
@@ -106,16 +110,17 @@ class Character:
     def re_set_attack_health(self):
         self._attack = self._innate_attack + self._weapon.attack_value() + self._armor.attack_value()
         self._defense = self._innate_defense + self._weapon.defense_value() + self._armor.defense_value()
+        self._armor_pen = self._armor_pen = self._weapon.get_armor_pen()
         self._saved_armor = self._defense
         self._saved_attack = self._attack
         self._saved_armor_pen = self._armor_pen
         self._crit_chance = self._innate_crit_chance + self._weapon.get_crit_chance()
 
     def decrease_attack_value(self, value):
-        self._attack = max(0, self._attack - value)
+        self._attack = self._attack - value
 
     def decrease_defense_value(self, value):
-        self._defense = max(0, self._defense - value)
+        self._defense = self._defense - value
 
     def increase_attack_value(self, value):
         self._attack = self._attack + value
@@ -132,20 +137,35 @@ class Character:
     def reduce_hp(self, damage_taken):
         self._health -= damage_taken
 
-    def attack(self, opponent):
+    def permanently_reduce_hp(self, value):
+        self._max_health -= value
+        self._health = min(self._max_health, self._health)
+
+    def get_multiplier(self, opponent):
         armour = opponent.get_armour()
-        counted_armor = armour * (1 - self._armor_pen)
-        multiplier = 100 / (100 + counted_armor)
-        damage = self._attack
+        if armour >= 0:
+            counted_armour = armour * (1 - self._armor_pen)
+            multiplier = 100 / (100 + counted_armour)
+        else:
+            multiplier = 2 - 100 / (100 - armour)
+        return multiplier
+
+    def attack(self, opponent):
+        multiplier = self.get_multiplier(opponent)
+        if self._attack >= 0:
+            damage = self._attack
+        else:
+            damage = 0
         damage *= multiplier
         opponent.reduce_hp(damage)
         return damage
 
     def critical_attack(self, opponent):
-        armour = opponent.get_armour()
-        counted_armor = armour * (1 - self._armor_pen)
-        multiplier = 100 / (100 + counted_armor)
-        damage = self._attack
+        multiplier = self.get_multiplier(opponent)
+        if self._attack >= 0:
+            damage = self._attack
+        else:
+            damage = 0
         damage *= multiplier
         damage *= 2
         opponent.reduce_hp(damage)
@@ -168,12 +188,13 @@ class Character:
         dodge_chance = opponent_armor.get_dodge()
         odds = dodge_chance * 100
         random_choice = random.randint(1, 100)
+        damage = 0
         if dodge_chance != 0 and random_choice <= odds:
-                string = opponent.get_name() + " dodged your attack!\n"
+            string = opponent.get_name() + " dodged your attack!\n"
         else:
-            if isinstance(opponent_weapon, SaroniteTentacles) and not opponent_weapon.is_broken():
+            if opponent_weapon.get_reflector() and not opponent_weapon.is_broken():
                 string = opponent_weapon.take_hit(self._attack)
-            elif isinstance(opponent_armor, SaroniteScales) and not opponent_armor.is_broken():
+            elif opponent_armor.get_reflector() and not opponent_armor.is_broken():
                 string = opponent_armor.take_hit(self._attack)
             elif critical <= self._crit_chance * 100:
                 damage = self.critical_attack(opponent)
@@ -187,15 +208,21 @@ class Character:
                 damage = self.attack(opponent)
                 string = str(round(damage, 2)) + " damage done to " + opponent.get_name() + "!\n"
                 string += opponent.get_name() + " is left with " + str(round(opponent.get_hp(), 2)) + " health!\n"
-                if self._weapon.has_effect() is not None:
-                    new_string = self._weapon.effect(damage, self, opponent)
-                    string += new_string
-                if self._weapon.get_life_steal() is not None:
-                    lifesteal_string = self.life_steal(damage)
-                    string += lifesteal_string
-                if self._armor.has_effect() is not None:
-                    new_string = self._armor.effect(damage, self, opponent)
-                    string += new_string
+            if self._weapon.has_effect() is not None:
+                new_string = self._weapon.effect(damage, self, opponent)
+                string += new_string
+            if self._weapon.get_life_steal() is not None:
+                lifesteal_string = self.life_steal(damage)
+                string += lifesteal_string
+            if self._armor.has_effect() is not None:
+                new_string = self._armor.effect(damage, self, opponent)
+                string += new_string
+            if self._weapon.has_passive() is not None:
+                new_string = self._weapon.passive(self, opponent, list_of_turns, turn_counter)
+                string += new_string
+            if self._armor.has_passive() is not None:
+                new_string = self._armor.passive(self, opponent, list_of_turns, turn_counter)
+                string += new_string
         return string
 
     def get_name(self):
@@ -219,6 +246,8 @@ class Character:
         if self._description is not None:
             string += '\n'
             string += self._description
+        string += str(self._weapon)
+        string += str(self._armor)
         return string
 
     def get_weapon(self):
