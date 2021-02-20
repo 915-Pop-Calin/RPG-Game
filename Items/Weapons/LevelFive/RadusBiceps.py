@@ -7,3 +7,5 @@ class RadusBiceps(Weapon):
         self._crit_chance = -0.15
         self._description = "Huge attack, but it can not crit.\n"
 
+    def get_id(self):
+        return 213

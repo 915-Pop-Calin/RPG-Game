@@ -76,6 +76,8 @@ class LastLevel:
         print("Very Well.")
 
     def spare(self):
+        print("A strange figure appears in the shadows.\n")
+        print("This is the end.\n")
         self.__final_boss = FinalBoss()
         self.__combat = Combat(self.__human_player, self.__final_boss)
         self.__combat.fight()

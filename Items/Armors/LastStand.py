@@ -5,6 +5,7 @@ class LastStand(Armour):
     def __init__(self):
         super().__init__(0, 400)
         self.set_passive()
+        self._description = "Great Armour which gets it armour removed if under 30% HP.\n"
 
     def passive(self, caster, opponent, list_of_turns, turn_counter):
         string = ""
@@ -21,3 +22,6 @@ class LastStand(Armour):
         caster.increase_attack_value(100)
         string = caster.get_name() + "'s defenses were brought back to normal!\n"
         return string
+
+    def get_id(self):
+        return 310

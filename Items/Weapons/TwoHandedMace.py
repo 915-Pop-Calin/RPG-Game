@@ -23,3 +23,6 @@ class TwoHandedMace(Weapon):
         caster.unstun()
         string = caster.get_name() + " can attack now!\n"
         return string
+
+    def get_id(self):
+        return 216

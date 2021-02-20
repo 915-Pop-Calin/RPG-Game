@@ -12,3 +12,6 @@ class CastingError(Exception):
 
 class StunError(Exception):
     pass
+
+class LoadingError(Exception):
+    pass

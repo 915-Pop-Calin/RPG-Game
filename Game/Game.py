@@ -1,5 +1,4 @@
 import random
-
 import termcolor
 
 from Characters.Cthulhu import Cthulhu
@@ -11,7 +10,7 @@ from Characters.Tem import Tem
 from Characters.YoggSaron import YoggSaron
 from Cheats.Cheats import Cheats
 from Combat.Combat import Combat
-from Exceptions.exceptions import ShoppingError, ItemError, PickingError
+from Exceptions.exceptions import ShoppingError, ItemError, PickingError, LoadingError
 from FinalLevel.LastLevel import LastLevel
 
 from Items.Potion.ExperiencePotion import ExperiencePotion
@@ -43,8 +42,14 @@ class Game:
     def initialise_game(self):
         decision = input("Do you want to load your save file? Y/N\n")
         if decision.upper().strip() == "Y":
-            self.__player = HumanPlayer("filler")
-            self.load()
+            try:
+                self.__player = HumanPlayer("filler")
+                self.load()
+            except LoadingError as LE:
+                print(str(LE))
+                name = input("The name you want to use from now on is:\n")
+                human = HumanPlayer(name)
+                self.__player = human
         else:
             name = input("The name you want to use from now on is:\n")
             human = HumanPlayer(name)

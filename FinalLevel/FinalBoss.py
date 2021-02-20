@@ -14,13 +14,17 @@ class FinalBoss(Character):
         self._options = {"physical": self.physical, "sanity": self.insanity , "both": self.both}
         self._dialogue = ["I am the lucid dream", "The monster in your nightmares", "The fiend of a thousand faces",
                           "Bow down before me!"]
+        self._turn_counter = 0
+        self._list_of_turns = {}
 
     def check_if_form_change(self):
         if self._phase == 1 and self._weapon.is_broken():
             self._phase = 2
+            self._turn_counter += 1
             return True, 2
         elif self._phase == 2 and self._armor.is_broken():
             self._phase = 3
+            self._turn_counter += 1
             return True, 3
         return False, 0
 
@@ -40,10 +44,12 @@ class FinalBoss(Character):
             self._dialogue[0] = "..."
         else:
             self._dialogue.pop(0)
+        self._turn_counter += 1
         return string
 
     def physical(self, opponent):
-        string = self.hit(opponent, None, None)
+        string = self.hit(opponent, self._list_of_turns, self._turn_counter)
+        self._turn_counter += 1
         return string
 
     def both(self, opponent):

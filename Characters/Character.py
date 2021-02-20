@@ -2,6 +2,7 @@ import random
 
 from Exceptions.exceptions import StunError
 from Items.Armors.Armour import Armour
+from Items.Armors.LastStand import LastStand
 from Items.Armors.LevelFive.EyeOfSauron import EyeOfSauron
 from Items.Armors.LevelFour.FireDeflector import FireDeflector
 from Items.Armors.LevelFour.Scales import Scales
@@ -11,11 +12,16 @@ from Items.Armors.LevelOne.Cloth import Cloth
 from Items.Armors.LevelOne.TemArmor import TemArmor
 from Items.Armors.LevelThree.BootsOfDodge import BootsOfDodge
 from Items.Armors.LevelTwo.SteelPlateau import SteelPlateau
+from Items.Armors.NinjaYoroi import NinjaYoroi
+from Items.Potion.DefensePotion import DefensePotion
 from Items.Potion.ExperiencePotion import ExperiencePotion
 from Items.Potion.GrainOfSalt import GrainOfSalt
 from Items.Potion.HealthPotion import HealthPotion
+from Items.Potion.OffensePotion import OffensePotion
 from Items.Potion.SanityPotion import SanityPotion
+from Items.Weapons.DoubleEdgedSword import DoubleEdgedSword
 from Items.Weapons.Dreams import Dreams
+from Items.Weapons.GiantSlayer import GiantSlayer
 from Items.Weapons.LevelFive.InfinityEdge import InfinityEdge
 from Items.Weapons.LevelFive.RadusBiceps import RadusBiceps
 from Items.Weapons.LevelFour.IcarusesTouch import IcarusesTouch
@@ -29,6 +35,7 @@ from Items.Weapons.LevelThree.TankBuster import TankBuster
 from Items.Weapons.LevelThree.Xalatath import Xalatath
 from Items.Weapons.LevelTwo.TacosWhisper import TacosWhisper
 from Items.Weapons.LevelTwo.TitansFindings import TitansFindings
+from Items.Weapons.TwoHandedMace import TwoHandedMace
 from Items.Weapons.Weapon import Weapon
 
 
@@ -54,17 +61,18 @@ class Character:
         self._saved_attack = self._attack
         self._saved_armor = self._defense
         self._saved_armor_pen = self._armor_pen
-        self._stunned = False
+        self._stunned = 0
+        #self._stunned = False
         self._dot_effects = []
         self._sanity = 100
         self._is_autoattacker = True
         self._stun_resistant = False
-        self.ids = {100: HealthPotion, 101: ExperiencePotion, 102: GrainOfSalt, 103: SanityPotion,
+        self.ids = {100: HealthPotion, 101: ExperiencePotion, 102: GrainOfSalt, 103: SanityPotion, 104: DefensePotion, 105: OffensePotion,
                     200: ToyKnife, 201: Eclipse, 202: LanguageHacker, 203: TacosWhisper, 204: Words, 205: BoilingBlood,
                     206: IcarusesTouch, 207: TankBuster, 208: InfinityEdge, 209: Dreams, 210: TheRing, 211: TitansFindings,
-                    212: Xalatath, 213: RadusBiceps,
+                    212: Xalatath, 213: RadusBiceps, 214: DoubleEdgedSword, 215: GiantSlayer, 216: TwoHandedMace,
                     300: WornBandage, 301: Cloth, 302: TemArmor, 303: SteelPlateau, 304: BootsOfDodge, 305: Scales,
-                    306: EyeOfSauron, 307: TidalArmour, 308: FireDeflector}
+                    306: EyeOfSauron, 307: TidalArmour, 308: FireDeflector, 309: NinjaYoroi, 310: LastStand}
 
     def set_defense_and_armour_to_normal(self):
         self._attack = self._saved_attack
@@ -271,13 +279,13 @@ class Character:
     def stun(self):
         if self._stun_resistant:
             raise StunError("Cannot stun a Stun Resistant target!\n")
-        self._stunned = True
+        self._stunned += 1
 
     def isStunned(self):
-        return self._stunned
+        return self._stunned != 0
 
     def unstun(self):
-        self._stunned = False
+        self._stunned -= 1
 
     def add_dot_effect(self, list):
         self._dot_effects.append(list.copy())

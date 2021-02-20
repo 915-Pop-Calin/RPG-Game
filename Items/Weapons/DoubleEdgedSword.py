@@ -5,6 +5,7 @@ class DoubleEdgedSword(Weapon):
     def __init__(self):
         super().__init__(50, 0)
         self.set_passive()
+        self._description = "Huge Attack Weapon, but your opponent's attacks are stronger.\n"
 
     def passive(self, caster, opponent, list_of_turns, turn_counter):
         opponent.increase_attack_value(10)
@@ -19,3 +20,6 @@ class DoubleEdgedSword(Weapon):
         opponent.decrease_attack_value(10)
         string = opponent.get_name() + "'s attack was decreased back by 10 for a turn by DoubleEdgedSword!\n"
         return string
+
+    def get_id(self):
+        return 214

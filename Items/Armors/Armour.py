@@ -24,9 +24,9 @@ class Armour:
         self.__defense = value
 
     def __str__(self):
-        string = str(type(self).__name__) + " ARMOUR: " + str(self.__attack) + " ATTACK, " + str(self.__defense) + " DEFENSE "
+        string = str(type(self).__name__) + " ARMOUR: " + str(self.__attack) + " ATTACK, " + str(self.__defense) + " DEFENSE"
         if self._description is not None:
-            string += "," + self._description
+            string += ", " + self._description
         return string
 
     def get_dodge(self):

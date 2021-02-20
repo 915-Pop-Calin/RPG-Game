@@ -13,8 +13,5 @@ class DefensePotion(Potion):
         string = "Your defense has been increased by 20, but your health was reduced by 5!\n"
         return string
 
-    def __str__(self):
-        return "DefensePotion: GAIN DEFENSE BUT LOSE HEALTH POINTS" + str(self._description)
-
     def get_id(self):
-        return 106
+        return 104

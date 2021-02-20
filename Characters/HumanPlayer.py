@@ -9,16 +9,18 @@ from Abilities.HumanAbilities.Taunt import Taunt
 from Abilities.HumanAbilities.TrueDamage import TrueDamage
 from Abilities.TemAbilities.DoNothing import DoNothing
 from Characters.Character import Character
-from Exceptions.exceptions import PickingError, ItemError, ShoppingError
+from Exceptions.exceptions import PickingError, ItemError, ShoppingError, LoadingError
 from Items.Armors.Armour import Armour
 from Items.Armors.LevelOne.Bandage import WornBandage
 from Items.Potion.Potion import Potion
 from Items.Weapons.LevelOne.ToyKnife import ToyKnife
+from Items.Weapons.TwoHandedMace import TwoHandedMace
 from Items.Weapons.Weapon import Weapon
 
 
 class HumanPlayer(Character):
     def __init__(self, name):
+        #super().__init__(name, 0, 0, TwoHandedMace(), WornBandage(), 20000)
         super().__init__(name, 10, 0, ToyKnife(), WornBandage(), 20)
         self.__level = 1
         self.__inventory = [None, None, None, None, None, None, None, None]
@@ -213,6 +215,8 @@ class HumanPlayer(Character):
     def load_save_file(self, filename):
         with open(filename, 'r') as file:
             lines = file.readlines()
+            if len(lines) == 0:
+                raise LoadingError("No save file to load!\n")
             line = lines[0]
             line = line.split(";")
             saved_level = int(line[0])
