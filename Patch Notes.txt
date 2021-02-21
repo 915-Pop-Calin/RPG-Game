@@ -1,0 +1,13 @@
+Patch Notes 0.1.1
+- Removed Experience Potion
+- Changed Drops after Spaghetti Monster to GrainOfSalt instead of Experience Potion
+- Items in shop no longer disappear after buying them
+- Fixed a bug where Max Health would not save along with the rest of your character
+- Buffed initial abilities so they're more useful; from linear growth, they went to exponential growth
+- Added description to TwoHandedMace, which was missing
+- DoubleEdgedSword attack nerfed from 50 to 35
+- RadusBiceps attack buffed from 50 to 75
+- TwoHandedMace attack buffed from 50 to 75
+- Added description to FireDeflector, which was missing
+- Fixed a bug where DOT effects would carry from a fight to another one
+- Nerfed Grain Of Salt healing per level from 10 to 7.5.

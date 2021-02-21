@@ -10,7 +10,6 @@ from Items.Armors.LevelThree.BootsOfDodge import BootsOfDodge
 from Items.Armors.LevelTwo.SteelPlateau import SteelPlateau
 from Items.Armors.NinjaYoroi import NinjaYoroi
 from Items.Potion.DefensePotion import DefensePotion
-from Items.Potion.ExperiencePotion import ExperiencePotion
 from Items.Potion.GrainOfSalt import GrainOfSalt
 from Items.Potion.HealthPotion import HealthPotion
 from Items.Potion.OffensePotion import OffensePotion
@@ -38,7 +37,7 @@ class Shop:
     def __init__(self, human_player, level):
         self._human_player = human_player
         self._level = level
-        self._universal_option = [[HealthPotion(), 10], [ExperiencePotion(), 1000], [GrainOfSalt(), 50], [DefensePotion(), 100], [OffensePotion(), 100]]
+        self._universal_option = [[HealthPotion(), 10], [GrainOfSalt(), 50], [DefensePotion(), 100], [OffensePotion(), 100]]
         self._options = {2 : [[TemArmor(), 150], [Cloth(), 100], [Eclipse(), 150], [Words(), 50], [ToyKnife(), 50], [TwoHandedMace(), 200]],
                          3 : [ [SteelPlateau(), 400], [TacosWhisper(), 500], [TitansFindings(), 500], [DoubleEdgedSword(), 400]],
                          4 : [[BootsOfDodge(), 500], [BoilingBlood(), 500], [TankBuster(), 500], [LanguageHacker(), 600], [Xalatath(), 600], [LastStand(), 600]],
@@ -71,8 +70,8 @@ class Shop:
         choice = input("the item you want to buy:\n")
         index = self.search_item_by_name(choice)
         item = self._total_options[index]
-        if not isinstance(item[0], Potion):
-            self._total_options.remove(self._total_options[index])
+        '''if not isinstance(item[0], Potion):
+            self._total_options.remove(self._total_options[index])'''
         self._human_player.buy_item(item[1], item[0])
 
     def find_cost_by_class(self, class_name):

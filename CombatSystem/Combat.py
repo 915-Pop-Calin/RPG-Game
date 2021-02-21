@@ -23,6 +23,9 @@ class Combat:
             del self._list_of_turns[self._turn_counter]
 
     def fight_end(self, second_player):
+        dot_effects = self._player.get_dot_effects()
+        if len(dot_effects) != 0:
+            self._player.clear_dot_effects()
         if len(self._list_of_turns.keys()) != 0:
             actions = []
             for key in self._list_of_turns.keys():

@@ -8,8 +8,8 @@ class Bolster(Ability):
         self._description = "your attack is increased while your opponent's attack is decreased for 3 turns\nstacks with itself\n"
 
     def cast(self, caster, opponent, list_of_turns, turn_counter):
-        difference = caster.get_level() * 2
-        if opponent.get_attack_value() <= caster.get_level() * 2:
+        difference = caster.get_level() ** 2
+        if opponent.get_attack_value() <= caster.get_level() ** 2:
             raise CastingError("Opponent's attack cannot be reduced to 0!")
         opponent.decrease_attack_value(difference)
         caster.increase_attack_value(difference)
@@ -23,7 +23,7 @@ class Bolster(Ability):
         return string
 
     def decast(self, caster, opponent):
-        difference = caster.get_level() * 2
+        difference = caster.get_level() ** 2
         opponent.increase_attack_value(difference)
         caster.decrease_attack_value(difference)
         string = "Your attack was decreased back by "

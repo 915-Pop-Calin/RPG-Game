@@ -173,7 +173,7 @@ class HumanPlayer(Character):
                 string += "\n"
         return string
 
-    def set_up(self, name, attack, defense, weapon, armour, health, level, gold, inventory):
+    def set_up(self, name, attack, defense, weapon, armour, health, max_health, level, gold, inventory):
         self._name = name
         self._innate_attack = attack
         self._innate_defense = defense
@@ -183,7 +183,7 @@ class HumanPlayer(Character):
         self.__level = level
         self.__inventory = inventory
         self.re_set_attack_health()
-        self._max_health += 5 * self.__level
+        self._max_health = max_health
         self._gold = gold
 
     def save_level_and_status(self, level, filename):
@@ -195,6 +195,7 @@ class HumanPlayer(Character):
         level_player = self.__level
         armour = self._armor.get_id()
         health = self._health
+        max_health = self._max_health
         gold = self._gold
         inventory = []
         for element in self.__inventory:
@@ -204,7 +205,7 @@ class HumanPlayer(Character):
                 inventory.append(element.get_id())
 
         with open(filename, 'w') as file:
-            line = str(saved_level) + ";" + str(name) + ";" + str(attack) + ";" + str(defense) + ";" + str(weapon) + ";" + str(armour) + ";" + str(health) + ";" + str(level_player) + ";" + str(gold) + ";"
+            line = str(saved_level) + ";" + str(name) + ";" + str(attack) + ";" + str(defense) + ";" + str(weapon) + ";" + str(armour) + ";" + str(health) + ";" + str(max_health) + ";" + str(level_player) + ";" + str(gold) + ";"
             for index in range (len(inventory)):
                 line += str(inventory[index])
                 if index != len(inventory) - 1:
@@ -228,10 +229,11 @@ class HumanPlayer(Character):
             armour_id = int(line[5])
             armour = self.ids[armour_id]()
             health = float(line[6])
-            level = int(line[7])
-            gold = int(line[8])
+            max_health = int(line[7])
+            level = int(line[8])
+            gold = int(line[9])
             inventory = []
-        for index in range(9, 17):
+        for index in range(10, 18):
             if int(line[index]) == 0:
                 inventory.append(None)
             else:
@@ -242,7 +244,7 @@ class HumanPlayer(Character):
             classname = type(classname).__name__
             classname = classname.lower()
             self.add_ability(classname, self.respective_abilities[classname])
-        self.set_up(name, attack, defense, weapon, armour, health, level, gold, inventory)
+        self.set_up(name, attack, defense, weapon, armour, health, max_health, level, gold, inventory)
         selves = [None,None,None]
         current_self = 0
         for index in range(1, len(lines)):

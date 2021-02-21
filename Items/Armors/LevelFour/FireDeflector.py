@@ -7,6 +7,7 @@ class FireDeflector(Armour):
     def __init__(self):
         super().__init__(0, 75)
         self.set_effect()
+        self._description = "Has the chance to deflect all DOT effects on his enemies.\n"
 
     def effect(self, damage, caster, opponent):
         random_choice = random.randint(1,4)

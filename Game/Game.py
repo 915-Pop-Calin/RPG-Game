@@ -12,8 +12,6 @@ from Cheats.Cheats import Cheats
 from Combat.Combat import Combat
 from Exceptions.exceptions import ShoppingError, ItemError, PickingError, LoadingError
 from FinalLevel.LastLevel import LastLevel
-
-from Items.Potion.ExperiencePotion import ExperiencePotion
 from Items.Potion.GrainOfSalt import GrainOfSalt
 from Items.Potion.HealthPotion import HealthPotion
 from Items.Potion.SanityPotion import SanityPotion
@@ -32,7 +30,7 @@ class Game:
         self.__level = 1
         self.droppable_items = []
         self.level_specific_enemy ={1: Tem, 2: SpaghettiMonster, 3: YoggSaron, 4: Cthulhu, 5: Icarus, 6: Sauron}
-        self.level_specific_consumable = {2: [HealthPotion, 3], 3: [ExperiencePotion, 1], 4: [SanityPotion, 2], 5: [SanityPotion, 2], 6: [GrainOfSalt, 3], 7: [SanityPotion, 2]}
+        self.level_specific_consumable = {2: [HealthPotion, 3], 3: [GrainOfSalt, 2], 4: [SanityPotion, 2], 5: [SanityPotion, 2], 6: [GrainOfSalt, 3], 7: [SanityPotion, 2]}
         self.__hasCheated = False
         self.__cheats = Cheats()
         self.__past_selves = []

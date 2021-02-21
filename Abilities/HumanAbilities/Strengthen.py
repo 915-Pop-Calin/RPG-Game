@@ -7,7 +7,7 @@ class Strengthen(Ability):
         self._description = "your attack and defense are increased for 3 turns\nstacks with itself\n"
 
     def cast(self, caster, opponent, list_of_turns, turn_counter):
-        difference = caster.get_level() * 2
+        difference = caster.get_level() ** 2
         caster.increase_attack_value(difference)
         caster.increase_defense_value(difference)
         string = "Your attack value and defense were increased by "

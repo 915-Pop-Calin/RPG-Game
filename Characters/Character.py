@@ -14,7 +14,6 @@ from Items.Armors.LevelThree.BootsOfDodge import BootsOfDodge
 from Items.Armors.LevelTwo.SteelPlateau import SteelPlateau
 from Items.Armors.NinjaYoroi import NinjaYoroi
 from Items.Potion.DefensePotion import DefensePotion
-from Items.Potion.ExperiencePotion import ExperiencePotion
 from Items.Potion.GrainOfSalt import GrainOfSalt
 from Items.Potion.HealthPotion import HealthPotion
 from Items.Potion.OffensePotion import OffensePotion
@@ -67,7 +66,7 @@ class Character:
         self._sanity = 100
         self._is_autoattacker = True
         self._stun_resistant = False
-        self.ids = {100: HealthPotion, 101: ExperiencePotion, 102: GrainOfSalt, 103: SanityPotion, 104: DefensePotion, 105: OffensePotion,
+        self.ids = {100: HealthPotion, 102: GrainOfSalt, 103: SanityPotion, 104: DefensePotion, 105: OffensePotion,
                     200: ToyKnife, 201: Eclipse, 202: LanguageHacker, 203: TacosWhisper, 204: Words, 205: BoilingBlood,
                     206: IcarusesTouch, 207: TankBuster, 208: InfinityEdge, 209: Dreams, 210: TheRing, 211: TitansFindings,
                     212: Xalatath, 213: RadusBiceps, 214: DoubleEdgedSword, 215: GiantSlayer, 216: TwoHandedMace,

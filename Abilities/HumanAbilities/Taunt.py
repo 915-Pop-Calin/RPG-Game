@@ -9,7 +9,7 @@ class Taunt(Ability):
 
 
     def cast(self, caster, opponent, list_of_turns, turn_counter):
-        difference = caster.get_level() * 2
+        difference = caster.get_level() ** 2
         if opponent.get_attack_value() <= difference or opponent.get_defense_value() <= difference:
             raise CastingError("Opponent's attack and defense cannot be reduced to 0!")
         opponent.decrease_attack_value(difference)
