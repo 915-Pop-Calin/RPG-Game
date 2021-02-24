@@ -8,7 +8,7 @@ class Discourage(Ability):
 
     def cast(self, caster, opponent, list_of_turns, turn_counter):
         opponent.set_attack_value(0)
-        string = opponent.get_name() + "\b's attack value was decreased to 0!\n"
+        string = opponent.get_name() + "'s attack value was decreased to 0!\n"
         if turn_counter + 1 in list_of_turns.keys():
             list_of_turns[turn_counter + 1].append(self.decast)
         else:

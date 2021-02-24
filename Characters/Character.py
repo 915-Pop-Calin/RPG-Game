@@ -13,6 +13,7 @@ from Items.Armors.LevelOne.TemArmor import TemArmor
 from Items.Armors.LevelThree.BootsOfDodge import BootsOfDodge
 from Items.Armors.LevelTwo.SteelPlateau import SteelPlateau
 from Items.Armors.NinjaYoroi import NinjaYoroi
+from Items.Armors.NoArmour import NoArmour
 from Items.Potion.DefensePotion import DefensePotion
 from Items.Potion.GrainOfSalt import GrainOfSalt
 from Items.Potion.HealthPotion import HealthPotion
@@ -34,6 +35,7 @@ from Items.Weapons.LevelThree.TankBuster import TankBuster
 from Items.Weapons.LevelThree.Xalatath import Xalatath
 from Items.Weapons.LevelTwo.TacosWhisper import TacosWhisper
 from Items.Weapons.LevelTwo.TitansFindings import TitansFindings
+from Items.Weapons.NoWeapon import NoWeapon
 from Items.Weapons.TwoHandedMace import TwoHandedMace
 from Items.Weapons.Weapon import Weapon
 
@@ -69,9 +71,9 @@ class Character:
         self.ids = {100: HealthPotion, 102: GrainOfSalt, 103: SanityPotion, 104: DefensePotion, 105: OffensePotion,
                     200: ToyKnife, 201: Eclipse, 202: LanguageHacker, 203: TacosWhisper, 204: Words, 205: BoilingBlood,
                     206: IcarusesTouch, 207: TankBuster, 208: InfinityEdge, 209: Dreams, 210: TheRing, 211: TitansFindings,
-                    212: Xalatath, 213: RadusBiceps, 214: DoubleEdgedSword, 215: GiantSlayer, 216: TwoHandedMace,
+                    212: Xalatath, 213: RadusBiceps, 214: DoubleEdgedSword, 215: GiantSlayer, 216: TwoHandedMace, 217: NoWeapon,
                     300: WornBandage, 301: Cloth, 302: TemArmor, 303: SteelPlateau, 304: BootsOfDodge, 305: Scales,
-                    306: EyeOfSauron, 307: TidalArmour, 308: FireDeflector, 309: NinjaYoroi, 310: LastStand}
+                    306: EyeOfSauron, 307: TidalArmour, 308: FireDeflector, 309: NinjaYoroi, 310: LastStand, 311: NoArmour}
 
     def set_defense_and_armour_to_normal(self):
         self._attack = self._saved_attack

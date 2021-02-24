@@ -1,3 +1,5 @@
+import texttable
+
 from Abilities.HumanAbilities.BlindingRage import BlindingRage
 from Abilities.HumanAbilities.Bolster import Bolster
 from Abilities.HumanAbilities.CCImunity import CCImunity
@@ -9,11 +11,13 @@ from Abilities.HumanAbilities.Taunt import Taunt
 from Abilities.HumanAbilities.TrueDamage import TrueDamage
 from Abilities.TemAbilities.DoNothing import DoNothing
 from Characters.Character import Character
-from Exceptions.exceptions import PickingError, ItemError, ShoppingError, LoadingError
+from Exceptions.exceptions import PickingError, ItemError, ShoppingError, LoadingError, DroppingError
 from Items.Armors.Armour import Armour
 from Items.Armors.LevelOne.Bandage import WornBandage
+from Items.Armors.NoArmour import NoArmour
 from Items.Potion.Potion import Potion
 from Items.Weapons.LevelOne.ToyKnife import ToyKnife
+from Items.Weapons.NoWeapon import NoWeapon
 from Items.Weapons.TwoHandedMace import TwoHandedMace
 from Items.Weapons.Weapon import Weapon
 
@@ -66,6 +70,23 @@ class HumanPlayer(Character):
         self.__inventory[item_index] = None
         return string
 
+    def move_weapon_to_inventory(self):
+        position = self.find_nonempty_position_in_inventory()
+        if position == -1:
+            raise DroppingError("Inventory is full!\n")
+        if type(self._weapon).__name__ == "NoWeapon":
+            raise DroppingError("You have no weapon to drop!\n")
+        self.__inventory[position] = self._weapon
+        self._weapon = NoWeapon()
+
+    def move_armour_to_inventory(self):
+        position = self.find_nonempty_position_in_inventory()
+        if position == -1:
+            raise DroppingError("Inventory is full!")
+        if type(self._armor).__name__ == "NoArmour":
+            raise DroppingError("You have no armour to drop!\n")
+        self.__inventory[position] = self._armor
+        self._armor = NoArmour()
 
     def use_item(self, item_name):
         item_index = self.find_inventory_by_name(item_name)
@@ -76,13 +97,19 @@ class HumanPlayer(Character):
         if isinstance(item, Weapon):
             string += "You have equipped " + type(self.__inventory[item_index]).__name__ + "!\n"
             old_weapon = self.change_weapon(item)
-            self.__inventory[item_index] = old_weapon
+            if type(old_weapon).__name__ != "NoWeapon":
+                self.__inventory[item_index] = old_weapon
+            else:
+                self.__inventory[item_index] = None
             self.re_set_attack_health()
 
         if isinstance(item, Armour):
             string += "You have equipped " + type(self.__inventory[item_index]).__name__ + "!\n"
             old_armour = self.change_armour(item)
-            self.__inventory[item_index] = old_armour
+            if type(old_armour).__name__ != "NoArmour":
+                self.__inventory[item_index] = old_armour
+            else:
+                self.__inventory[item_index] = None
             self.re_set_attack_health()
 
         if isinstance(item, Potion):
@@ -164,14 +191,24 @@ class HumanPlayer(Character):
         return self.__level
 
     def print_inventory(self):
-        string = ""
+        '''string = ""
         for element in self.__inventory:
             if element == None:
                 string += "Empty Place\n"
             else:
                 string += str(element)
                 string += "\n"
-        return string
+        return string'''
+        table = texttable.Texttable()
+        table.add_row(["Inventory:"])
+        for i in range(len(self.__inventory)):
+            line = list()
+            if self.__inventory[i] is None:
+                line.append("Empty Place\n")
+            else:
+                line.append(str(self.__inventory[i]))
+            table.add_row(line)
+        return table.draw()
 
     def set_up(self, name, attack, defense, weapon, armour, health, max_health, level, gold, inventory):
         self._name = name

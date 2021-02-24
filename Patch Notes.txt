@@ -11,3 +11,10 @@ Patch Notes 0.1.1
 - Added description to FireDeflector, which was missing
 - Fixed a bug where DOT effects would carry from a fight to another one
 - Nerfed Grain Of Salt healing per level from 10 to 7.5.
+
+Patch Notes 0.1.2
+- Inventory is now printed through a texttable! (Easier to see)
+- Out of combat options are now split into Game Options, Player Options and Shop Options
+- Added a new option for Player Options: drop current item
+- Added the possibility to not wear any armour or weapon at a given time
+- Fixed some typos when using human abilities

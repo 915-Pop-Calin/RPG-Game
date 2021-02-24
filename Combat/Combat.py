@@ -23,7 +23,7 @@ class Combat:
             self.__computer_combat = LastBossCombat(self.__computerPlayer)
 
     def print_options(self):
-        string = "check stats\nequip item\n"
+        string = "Combat Options:\n\ncheck stats\nequip item\n"
         for option in self.__humanPlayer.get_options().keys():
             string += option
             string += "\n"

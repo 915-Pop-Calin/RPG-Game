@@ -10,7 +10,7 @@ from Characters.Tem import Tem
 from Characters.YoggSaron import YoggSaron
 from Cheats.Cheats import Cheats
 from Combat.Combat import Combat
-from Exceptions.exceptions import ShoppingError, ItemError, PickingError, LoadingError
+from Exceptions.exceptions import ShoppingError, ItemError, PickingError, LoadingError, DroppingError
 from FinalLevel.LastLevel import LastLevel
 from Items.Potion.GrainOfSalt import GrainOfSalt
 from Items.Potion.HealthPotion import HealthPotion
@@ -58,13 +58,20 @@ class Game:
         else:
             self.out_of_combat()
 
+    def print_menu(self):
+        string = "Game Options:\nproceed\nsave\nexit\n\n"
+        string += "Player Options:\nequip item\ndrop item\ncheck stats\ndrop current item\nsee abilities\n\n"
+        string += "Shop Options:\nbuy\nsell\n\n"
+        print(string)
+
     def out_of_combat(self):
         self.__shop = Shop(self.__player, self.__level)
         decision = None
-        while decision != "next":
-            decision = input("next\nstats\nequip item\ndrop item\nsave\nsee abilities\nbuy\nsell\nexit\n")
+        while decision != "proceed":
+            self.print_menu()
+            decision = input()
             decision = decision.lower().strip()
-            if decision == "stats":
+            if decision == "check stats":
                 print(self.__player.print_stats())
             elif decision == "equip item":
                 try:
@@ -110,11 +117,23 @@ class Game:
                     self.__shop.sell_item()
                 except ShoppingError as SE:
                     print(str(SE))
+            elif decision == "drop current item":
+                choice = input("Drop Weapon or Armour? W/A\n")
+                choice = choice.lower().strip()
+                try:
+                    if choice == "w":
+                        self.__player.move_weapon_to_inventory()
+                    elif choice == "a":
+                        self.__player.move_armour_to_inventory()
+                    else:
+                        print("Invalid Input!\n")
+                except DroppingError as DE:
+                    print(str(DE))
             elif decision in self.__cheats.list_of_cheats.keys():
                 string = self.__cheats.list_of_cheats[decision](self)
                 print(string)
                 self.__shop = Shop(self.__player, self.__level)
-            elif decision != "next":
+            elif decision != "proceed":
                 print("Invalid Command!")
 
     def level(self):
