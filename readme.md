@@ -9,4 +9,5 @@ The newest Python version
 termcolor package  
 random package  
 math package  
+texttable package  
 In order to run it, open a command prompt in the cloned repo and just write py main.py
