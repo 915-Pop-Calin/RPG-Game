@@ -3,7 +3,7 @@ from Items.Weapons.Weapon import Weapon
 
 class DoubleEdgedSword(Weapon):
     def __init__(self):
-        super().__init__(35, 0)
+        super().__init__(20, 0)
         self.set_passive()
         self._description = "Huge Attack Weapon, but your opponent's attacks are stronger.\n"
 

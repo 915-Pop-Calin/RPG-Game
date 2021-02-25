@@ -4,7 +4,7 @@ from Items.Weapons.Weapon import Weapon
 
 class TwoHandedMace(Weapon):
     def __init__(self):
-        super().__init__(75, 0)
+        super().__init__(45, 0)
         self.set_passive()
         self._description = "Strong attack weapon, but stuns you for one turn.\n"
 

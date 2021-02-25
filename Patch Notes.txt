@@ -5,8 +5,8 @@ Patch Notes 0.1.1
 - Fixed a bug where Max Health would not save along with the rest of your character
 - Buffed initial abilities so they're more useful; from linear growth, they went to exponential growth
 - Added description to TwoHandedMace, which was missing
-- DoubleEdgedSword attack nerfed from 50 to 35
-- RadusBiceps attack buffed from 50 to 75
+- DoubleEdgedSword's attack nerfed from 50 to 35
+- RadusBiceps's attack buffed from 50 to 75
 - TwoHandedMace attack buffed from 50 to 75
 - Added description to FireDeflector, which was missing
 - Fixed a bug where DOT effects would carry from a fight to another one
@@ -20,10 +20,11 @@ Patch Notes 0.1.2
 - Fixed some typos when using human abilities
 
 Patch Notes 0.1.3
-- DoubleEdgedSword attack nerfed from 35 to 20
+- DoubleEdgedSword's attack nerfed from 35 to 20
 - Xalatath's attack nerfed from 15 to 10
 - Sell values now nerfed - you only gain 75% gold back instead of 100% gold when selling an item
 - Added some QoL features for the last level
 - Chance of Fire Deflector deflecting DOT effects lowered from 25% to 10%
 - Added missing description to CCImmunity and TrueDamage
+- TwoHandedMace's attack nerfed from 75 to 45, TwoHandedMace's cost nerfed to 750 gold and it can be bought from the shop only from level 3
 

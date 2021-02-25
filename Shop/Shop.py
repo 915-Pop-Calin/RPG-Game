@@ -15,6 +15,7 @@ from Items.Potion.GrainOfSalt import GrainOfSalt
 from Items.Potion.HealthPotion import HealthPotion
 from Items.Potion.OffensePotion import OffensePotion
 from Items.Potion.Potion import Potion
+from Items.Potion.SanityPotion import SanityPotion
 from Items.Weapons.DoubleEdgedSword import DoubleEdgedSword
 from Items.Weapons.Dreams import Dreams
 from Items.Weapons.GiantSlayer import GiantSlayer
@@ -38,9 +39,9 @@ class Shop:
     def __init__(self, human_player, level):
         self._human_player = human_player
         self._level = level
-        self._universal_option = [[HealthPotion(), 10], [GrainOfSalt(), 50], [DefensePotion(), 100], [OffensePotion(), 100]]
-        self._options = {2 : [[TemArmor(), 150], [Cloth(), 100], [Eclipse(), 150], [Words(), 50], [ToyKnife(), 50], [WornBandage(), 0], [TwoHandedMace(), 200]],
-                         3 : [ [SteelPlateau(), 400], [TacosWhisper(), 500], [TitansFindings(), 500], [DoubleEdgedSword(), 400]],
+        self._universal_option = [[HealthPotion(), 10], [GrainOfSalt(), 50], [DefensePotion(), 100], [OffensePotion(), 100], [SanityPotion(), 200]]
+        self._options = {2 : [[TemArmor(), 150], [Cloth(), 100], [Eclipse(), 150], [Words(), 50], [ToyKnife(), 50], [WornBandage(), 0]],
+                         3 : [ [SteelPlateau(), 400], [TacosWhisper(), 500], [TitansFindings(), 500], [DoubleEdgedSword(), 400], [TwoHandedMace(), 750]],
                          4 : [[BootsOfDodge(), 500], [BoilingBlood(), 500], [TankBuster(), 500], [LanguageHacker(), 600], [Xalatath(), 600], [LastStand(), 600]],
                          5 : [[Scales(), 200], [IcarusesTouch(), 900], [TidalArmour(), 700], [FireDeflector(), 800], [GiantSlayer(), 900]],
                          6: [[EyeOfSauron(), 1000], [InfinityEdge(), 500], [RadusBiceps(), 700], [NinjaYoroi(), 1000]],
@@ -58,6 +59,8 @@ class Shop:
         for index in range (2, 8):
             for tuple in self._options[index]:
                 self._all_items.append(tuple)
+        for option in self._universal_option:
+            self._all_items.append(option)
 
 
     def print_options(self):
