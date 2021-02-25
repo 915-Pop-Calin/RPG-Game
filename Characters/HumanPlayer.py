@@ -175,6 +175,9 @@ class HumanPlayer(Character):
         self._max_health += 15
         self._innate_defense += 10
         self._innate_attack += 3
+        print("max_health", self._max_health)
+        print("innate def", self._innate_defense)
+        print("innate atk", self._innate_attack)
         self.re_set_attack_health()
         self.new_ability()
 

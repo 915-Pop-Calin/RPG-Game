@@ -19,6 +19,7 @@ class LastLevel:
 
 
     def play_out(self):
+        self.delete_save_file("saved.txt")
         self.startup()
         decision = self.the_decision()
         if decision == "destroy":
@@ -33,6 +34,11 @@ class LastLevel:
             self.spare()
             if not self.__human_player.get_hp() <=0:
                 print(termcolor.colored("GOOD ENDING", "blue"))
+
+    def delete_save_file(self, filename):
+        with open(filename, 'w') as file:
+            line = ""
+            file.write(line)
 
     def startup(self):
         while len(self.__dialogue) != 1:

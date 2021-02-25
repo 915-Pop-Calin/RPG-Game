@@ -213,11 +213,11 @@ class Game:
                     break
                 self.__in_combat = True
         if self.__level == 7 and not self.__dead and not self.__exit:
-            if not self.__hasCheated:
-                self.__last_level = LastLevel(self.__player, self.__past_selves)
-                self.__last_level.play_out()
-            else:
-                print("Last level cannot be played because you cheated!\n")
+            #if not self.__hasCheated:
+            self.__last_level = LastLevel(self.__player, self.__past_selves)
+            self.__last_level.play_out()
+            #else:
+            #    print("Last level cannot be played because you cheated!\n")
 
     def save(self):
         self.__player.save_level_and_status(self.__level, self.__save_file)

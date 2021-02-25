@@ -18,3 +18,12 @@ Patch Notes 0.1.2
 - Added a new option for Player Options: drop current item
 - Added the possibility to not wear any armour or weapon at a given time
 - Fixed some typos when using human abilities
+
+Patch Notes 0.1.3
+- DoubleEdgedSword attack nerfed from 35 to 20
+- Xalatath's attack nerfed from 15 to 10
+- Sell values now nerfed - you only gain 75% gold back instead of 100% gold when selling an item
+- Added some QoL features for the last level
+- Chance of Fire Deflector deflecting DOT effects lowered from 25% to 10%
+- Added missing description to CCImmunity and TrueDamage
+

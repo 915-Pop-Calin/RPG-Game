@@ -4,6 +4,7 @@ from Items.Armors.LevelFive.EyeOfSauron import EyeOfSauron
 from Items.Armors.LevelFour.FireDeflector import FireDeflector
 from Items.Armors.LevelFour.Scales import Scales
 from Items.Armors.LevelFour.TidalArmour import TidalArmour
+from Items.Armors.LevelOne.Bandage import WornBandage
 from Items.Armors.LevelOne.Cloth import Cloth
 from Items.Armors.LevelOne.TemArmor import TemArmor
 from Items.Armors.LevelThree.BootsOfDodge import BootsOfDodge
@@ -38,7 +39,7 @@ class Shop:
         self._human_player = human_player
         self._level = level
         self._universal_option = [[HealthPotion(), 10], [GrainOfSalt(), 50], [DefensePotion(), 100], [OffensePotion(), 100]]
-        self._options = {2 : [[TemArmor(), 150], [Cloth(), 100], [Eclipse(), 150], [Words(), 50], [ToyKnife(), 50], [TwoHandedMace(), 200]],
+        self._options = {2 : [[TemArmor(), 150], [Cloth(), 100], [Eclipse(), 150], [Words(), 50], [ToyKnife(), 50], [WornBandage(), 0], [TwoHandedMace(), 200]],
                          3 : [ [SteelPlateau(), 400], [TacosWhisper(), 500], [TitansFindings(), 500], [DoubleEdgedSword(), 400]],
                          4 : [[BootsOfDodge(), 500], [BoilingBlood(), 500], [TankBuster(), 500], [LanguageHacker(), 600], [Xalatath(), 600], [LastStand(), 600]],
                          5 : [[Scales(), 200], [IcarusesTouch(), 900], [TidalArmour(), 700], [FireDeflector(), 800], [GiantSlayer(), 900]],
@@ -53,6 +54,11 @@ class Shop:
         for index in range (2, self._level + 1):
             for tuple in self._options[index]:
                 self._total_options.append(tuple)
+        self._all_items = []
+        for index in range (2, 8):
+            for tuple in self._options[index]:
+                self._all_items.append(tuple)
+
 
     def print_options(self):
         print(str(self._human_player.get_gold()) + " gold available")
@@ -75,19 +81,19 @@ class Shop:
         self._human_player.buy_item(item[1], item[0])
 
     def find_cost_by_class(self, class_name):
-        for option in self._total_options:
-            if type(option[0]).__name__ == type(class_name).__name__:
+        for option in self._all_items:
+            if type(option[0]).__name__.lower().strip() == type(class_name).__name__.lower().strip():
                 return option[1]
         return None
 
     def sell_item(self):
         for element in self._human_player.get_inventory():
             if element is not None:
-                print(element, ", GOLD: ", self.find_cost_by_class(element))
+                print(element, " GOLD: ", 0.75 * self.find_cost_by_class(element), "\n")
         choice = input("the item you want to sell:\n")
         choice = choice.lower().strip()
-        for option in self._total_options:
+        for option in self._all_items:
             if type(option[0]).__name__.lower() == choice:
-                self._human_player.sell_item(option[1], choice)
+                self._human_player.sell_item(0.75 * option[1], choice)
                 return True
         raise ShoppingError("Item Cannot Be Found In Shop!\n")

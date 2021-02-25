@@ -4,7 +4,7 @@ from Items.Weapons.Weapon import Weapon
 
 class Xalatath(Weapon):
     def __init__(self):
-        super().__init__(15, 0)
+        super().__init__(10, 0)
         self.set_life_steal(0.75)
         self._description = "VERY strong lifestealer which helps you not go insane.\n"
         self.set_effect()

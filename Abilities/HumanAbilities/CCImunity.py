@@ -4,6 +4,7 @@ from Abilities.Ability import Ability
 class CCImunity(Ability):
     def __init__(self):
         super().__init__()
+        self._description = "you become immune to CC for 5 turns\n"
 
     def cast(self, caster, opponent, list_of_turns, turn_counter):
         caster.set_stun_resistant(True)
