@@ -19,7 +19,6 @@ class LastLevel:
 
 
     def play_out(self):
-        self.delete_save_file("saved.txt")
         self.startup()
         decision = self.the_decision()
         if decision == "destroy":
@@ -30,10 +29,12 @@ class LastLevel:
                 if choice2 is not  None:
                     self.adult_chara_fight()
             print(termcolor.colored("BAD ENDING", "red"))
+            self.delete_save_file("saved.txt")
         if decision == "spare":
             self.spare()
             if not self.__human_player.get_hp() <=0:
                 print(termcolor.colored("GOOD ENDING", "blue"))
+                self.delete_save_file("saved.txt")
 
     def delete_save_file(self, filename):
         with open(filename, 'w') as file:
