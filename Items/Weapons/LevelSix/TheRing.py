@@ -22,6 +22,3 @@ class TheRing(Weapon):
         string += caster.get_name() + "'s weapon attack was increased by 1!\n"
         caster.re_set_attack_health()
         return string
-
-    def get_id(self):
-        return 210

@@ -18,6 +18,3 @@ class Dreams(Weapon):
             string = opponent.get_name() + "\b's sanity was reduced by " + str(madness_inducer) + "!\n"
             string += opponent.get_name() + " has " + str(opponent.get_sanity()) + " sanity left!\n"
         return string
-
-    def get_id(self):
-        return 209

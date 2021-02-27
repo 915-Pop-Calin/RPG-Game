@@ -11,6 +11,3 @@ class HealthPotion(Potion):
         human_player.heal(self.__healing_value)
         string = "You have healed for " + str(self.__healing_value) + " !\n"
         return string
-
-    def get_id(self):
-        return 100

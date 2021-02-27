@@ -5,6 +5,3 @@ class ToyKnife(Weapon):
     def __init__(self):
         super().__init__(3, 0)
         self._description = "Is this a game?\n"
-
-    def get_id(self):
-        return 200

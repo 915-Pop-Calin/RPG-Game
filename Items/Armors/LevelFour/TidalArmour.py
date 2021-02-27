@@ -11,6 +11,3 @@ class TidalArmour(Armour):
         caster.decrease_dot_effects(1)
         string = caster.get_name() + " has decreased all dot effects on him by 1!\n"
         return string
-
-    def get_id(self):
-        return 307

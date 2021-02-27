@@ -16,5 +16,8 @@ class StunError(Exception):
 class LoadingError(Exception):
     pass
 
+class SavingError(Exception):
+    pass
+
 class DroppingError(Exception):
     pass

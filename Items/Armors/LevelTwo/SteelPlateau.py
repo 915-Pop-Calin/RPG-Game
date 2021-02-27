@@ -12,6 +12,3 @@ class SteelPlateau(Armour):
         string = "Steel Plateau has dealt 5 true damage to " + str(caster.get_name()) + str("! \n")
         string += str(caster.get_name()) + " is left with " + str(caster.get_hp()) + str("health! \n")
         return string
-
-    def get_id(self):
-        return 303

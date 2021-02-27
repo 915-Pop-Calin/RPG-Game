@@ -20,6 +20,3 @@ class DoubleEdgedSword(Weapon):
         opponent.decrease_attack_value(10)
         string = opponent.get_name() + "'s attack was decreased back by 10 for a turn by DoubleEdgedSword!\n"
         return string
-
-    def get_id(self):
-        return 214

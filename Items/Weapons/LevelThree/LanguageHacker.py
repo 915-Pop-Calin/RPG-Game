@@ -16,6 +16,3 @@ class LanguageHacker(Weapon):
         except PickingError as PE:
             string = "Grain of salt was not added to your inventory because inventory was full!\n"
         return string
-
-    def get_id(self):
-        return 202

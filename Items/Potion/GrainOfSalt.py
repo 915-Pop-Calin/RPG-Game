@@ -12,6 +12,3 @@ class GrainOfSalt(Potion):
         human_player.heal(healing_done)
         string = "You have healed for " + str(healing_done) + " !\n"
         return string
-
-    def get_id(self):
-        return 102

@@ -12,6 +12,3 @@ class DefensePotion(Potion):
         human_player.permanently_reduce_hp(5)
         string = "Your defense has been increased by 20, but your health was reduced by 5!\n"
         return string
-
-    def get_id(self):
-        return 104

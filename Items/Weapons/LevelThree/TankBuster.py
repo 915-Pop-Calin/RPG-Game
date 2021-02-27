@@ -11,7 +11,3 @@ class TankBuster(Weapon):
         caster.deal_damage(opponent, damage)
         string = caster.get_name() + " did a double hit and dealt " + str(damage) + " damage!"
         return string
-
-    def get_id(self):
-        return 207
-

@@ -22,6 +22,3 @@ class LastStand(Armour):
         caster.increase_attack_value(100)
         string = caster.get_name() + "'s defenses were brought back to normal!\n"
         return string
-
-    def get_id(self):
-        return 310

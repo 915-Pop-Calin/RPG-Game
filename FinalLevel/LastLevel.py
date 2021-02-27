@@ -3,6 +3,7 @@ import termcolor
 from Combat.Combat import Combat
 from FinalLevel.FinalBoss import FinalBoss
 from FinalLevel.GenocideCombat import GenocideCombat
+from SaveFile.SaveFile import SaveFile
 
 
 class LastLevel:
@@ -29,17 +30,17 @@ class LastLevel:
                 if choice2 is not  None:
                     self.adult_chara_fight()
             print(termcolor.colored("BAD ENDING", "red"))
-            self.delete_save_file("saved.txt")
+            self.delete_save_files()
         if decision == "spare":
             self.spare()
             if not self.__human_player.get_hp() <=0:
                 print(termcolor.colored("GOOD ENDING", "blue"))
-                self.delete_save_file("saved.txt")
+                self.delete_save_files()
 
-    def delete_save_file(self, filename):
-        with open(filename, 'w') as file:
-            line = ""
-            file.write(line)
+    def delete_save_files(self):
+        for index in range (10):
+            savefile = SaveFile(index)
+            savefile.delete_save_file()
 
     def startup(self):
         while len(self.__dialogue) != 1:

@@ -2,41 +2,6 @@ import random
 
 from Exceptions.exceptions import StunError
 from Items.Armors.Armour import Armour
-from Items.Armors.LastStand import LastStand
-from Items.Armors.LevelFive.EyeOfSauron import EyeOfSauron
-from Items.Armors.LevelFour.FireDeflector import FireDeflector
-from Items.Armors.LevelFour.Scales import Scales
-from Items.Armors.LevelFour.TidalArmour import TidalArmour
-from Items.Armors.LevelOne.Bandage import WornBandage
-from Items.Armors.LevelOne.Cloth import Cloth
-from Items.Armors.LevelOne.TemArmor import TemArmor
-from Items.Armors.LevelThree.BootsOfDodge import BootsOfDodge
-from Items.Armors.LevelTwo.SteelPlateau import SteelPlateau
-from Items.Armors.NinjaYoroi import NinjaYoroi
-from Items.Armors.NoArmour import NoArmour
-from Items.Potion.DefensePotion import DefensePotion
-from Items.Potion.GrainOfSalt import GrainOfSalt
-from Items.Potion.HealthPotion import HealthPotion
-from Items.Potion.OffensePotion import OffensePotion
-from Items.Potion.SanityPotion import SanityPotion
-from Items.Weapons.DoubleEdgedSword import DoubleEdgedSword
-from Items.Weapons.Dreams import Dreams
-from Items.Weapons.GiantSlayer import GiantSlayer
-from Items.Weapons.LevelFive.InfinityEdge import InfinityEdge
-from Items.Weapons.LevelFive.RadusBiceps import RadusBiceps
-from Items.Weapons.LevelFour.IcarusesTouch import IcarusesTouch
-from Items.Weapons.LevelOne.Eclipse import Eclipse
-from Items.Weapons.LevelOne.ToyKnife import ToyKnife
-from Items.Weapons.LevelOne.Words import Words
-from Items.Weapons.LevelSix.TheRing import TheRing
-from Items.Weapons.LevelThree.BoilingBlood import BoilingBlood
-from Items.Weapons.LevelThree.LanguageHacker import LanguageHacker
-from Items.Weapons.LevelThree.TankBuster import TankBuster
-from Items.Weapons.LevelThree.Xalatath import Xalatath
-from Items.Weapons.LevelTwo.TacosWhisper import TacosWhisper
-from Items.Weapons.LevelTwo.TitansFindings import TitansFindings
-from Items.Weapons.NoWeapon import NoWeapon
-from Items.Weapons.TwoHandedMace import TwoHandedMace
 from Items.Weapons.Weapon import Weapon
 
 
@@ -63,17 +28,10 @@ class Character:
         self._saved_armor = self._defense
         self._saved_armor_pen = self._armor_pen
         self._stunned = 0
-        #self._stunned = False
         self._dot_effects = []
         self._sanity = 100
         self._is_autoattacker = True
         self._stun_resistant = False
-        self.ids = {100: HealthPotion, 102: GrainOfSalt, 103: SanityPotion, 104: DefensePotion, 105: OffensePotion,
-                    200: ToyKnife, 201: Eclipse, 202: LanguageHacker, 203: TacosWhisper, 204: Words, 205: BoilingBlood,
-                    206: IcarusesTouch, 207: TankBuster, 208: InfinityEdge, 209: Dreams, 210: TheRing, 211: TitansFindings,
-                    212: Xalatath, 213: RadusBiceps, 214: DoubleEdgedSword, 215: GiantSlayer, 216: TwoHandedMace, 217: NoWeapon,
-                    300: WornBandage, 301: Cloth, 302: TemArmor, 303: SteelPlateau, 304: BootsOfDodge, 305: Scales,
-                    306: EyeOfSauron, 307: TidalArmour, 308: FireDeflector, 309: NinjaYoroi, 310: LastStand, 311: NoArmour}
 
     def set_defense_and_armour_to_normal(self):
         self._attack = self._saved_attack
@@ -335,36 +293,6 @@ class Character:
 
     def delete_options(self):
         self._options = {"attack": self.hit}
-
-    def save_character(self, filename):
-        name = self._name
-        attack = self._innate_attack
-        defense = self._innate_defense
-        weapon = self._weapon.get_id()
-        armour = self._armor.get_id()
-        health = self._health
-        description = self._description
-        with open(filename, "a") as file:
-            line = str(name) + ";" + str(attack) + ";" + str(defense) + ";" + str(weapon) + ";" + str(armour) + ";" + str(health) + ";" + str(description)
-            line += "\n"
-            file.write(line)
-
-    def load_character(self, filename, line_counter):
-        with open(filename, 'r') as file:
-            lines = file.readlines()
-            line = lines[line_counter]
-            line = line.split(";")
-            name = line[0]
-            attack = int(line[1])
-            defense = int(line[2])
-            weapon_id = int(line[3])
-            weapon = self.ids[weapon_id]()
-            armor_id = int(line[4])
-            armor = self.ids[armor_id]()
-            health = float(line[5])
-            description = line[6]
-            chara = Character(name, attack, defense, weapon, armor, health, description)
-            return chara
 
     def direct_equip(self, item):
         if isinstance(item, Weapon):

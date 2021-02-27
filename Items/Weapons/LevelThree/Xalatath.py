@@ -17,6 +17,3 @@ class Xalatath(Weapon):
         string = caster.get_name() + " has restored " + str(random_int) + " of his sanity!\n"
         string += caster.get_name() + " is left with " + str(caster.get_sanity()) + " sanity!\n"
         return string
-
-    def get_id(self):
-        return 212

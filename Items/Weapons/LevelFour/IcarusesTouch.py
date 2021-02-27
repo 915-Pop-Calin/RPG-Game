@@ -11,6 +11,3 @@ class IcarusesTouch(Weapon):
     def effect(self, damage, caster, opponent):
         opponent.add_dot_effect(self._dot_effect)
         return opponent.get_name() + " will take " + str(self._dot_effect[0]) + " damage every turn for " + str(self._dot_effect[1]) + " turns!\n"
-
-    def get_id(self):
-        return 206

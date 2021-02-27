@@ -11,6 +11,3 @@ class SanityPotion(Potion):
         human_player.restore_sanity(self._sanity_restoring_value)
         string = "You have restored " + str(self._sanity_restoring_value) + " of your sanity!\n"
         return string
-
-    def get_id(self):
-        return 103

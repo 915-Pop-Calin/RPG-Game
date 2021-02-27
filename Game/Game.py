@@ -10,11 +10,12 @@ from Characters.Tem import Tem
 from Characters.YoggSaron import YoggSaron
 from Cheats.Cheats import Cheats
 from Combat.Combat import Combat
-from Exceptions.exceptions import ShoppingError, ItemError, PickingError, LoadingError, DroppingError
+from Exceptions.exceptions import ShoppingError, ItemError, PickingError, LoadingError, DroppingError, SavingError
 from FinalLevel.LastLevel import LastLevel
 from Items.Potion.GrainOfSalt import GrainOfSalt
 from Items.Potion.HealthPotion import HealthPotion
 from Items.Potion.SanityPotion import SanityPotion
+from SaveFile.SaveFile import SaveFile
 from Shop.Shop import Shop
 
 
@@ -25,7 +26,6 @@ class Game:
         self.__enemy = None
         self.__combat = None
         self.__in_combat = True
-        self.__save_file = "saved.txt"
         self.__exit = False
         self.__level = 1
         self.droppable_items = []
@@ -36,6 +36,9 @@ class Game:
         self.__past_selves = []
         self.__level_break_points = {2: ["young ", "does not want to hurt you"], 5: ["teen ", "might want to hurt you"],
                                                                                      7: ["adult ", "wants to MURDER you"]}
+        self.__list_of_save_files = [SaveFile(0), SaveFile(1), SaveFile(2), SaveFile(3), SaveFile(4),
+                                     SaveFile(5), SaveFile(6), SaveFile(7), SaveFile(8), SaveFile(9)]
+
 
     def initialise_game(self):
         decision = input("Do you want to load your save file? Y/N\n")
@@ -48,6 +51,12 @@ class Game:
                 name = input("The name you want to use from now on is:\n")
                 human = HumanPlayer(name)
                 self.__player = human
+            except SavingError as SE:
+                print(str(SE))
+                name = input("The name you want to use from now on is:\n")
+                human = HumanPlayer(name)
+                self.__player = human
+
         else:
             name = input("The name you want to use from now on is:\n")
             human = HumanPlayer(name)
@@ -71,10 +80,10 @@ class Game:
             self.print_menu()
             decision = input()
             decision = decision.lower().strip()
-            if decision == "check stats":
-                print(self.__player.print_stats())
-            elif decision == "equip item":
-                try:
+            try:
+                if decision == "check stats":
+                    print(self.__player.print_stats())
+                elif decision == "equip item":
                     print(self.__player.print_inventory())
                     item = input("the item you want to equip:\n")
                     if item == "back":
@@ -82,10 +91,7 @@ class Game:
                     else:
                         string = self.__player.use_item(item)
                         print(string)
-                except ItemError as IE:
-                    print(str(IE))
-            elif decision == "drop item":
-                try:
+                elif decision == "drop item":
                     print(self.__player.print_inventory())
                     item = input("the item you want to drop:\n")
                     if item == "back":
@@ -93,48 +99,45 @@ class Game:
                     else:
                         string = self.__player.drop_item(item)
                         print(string)
-                except ItemError as IE:
-                    print(str(IE))
-            elif decision == "save":
-                if self.__hasCheated:
-                    print("Game cannot be saved because you cheated!\n")
-                else:
-                    self.save()
-            elif decision == "exit":
-                self.__exit = True
-                break
-            elif decision == "see abilities":
-                self.__player.print_abilities_description()
-            elif decision == "buy":
-                try:
+                elif decision == "save":
+                    if self.__hasCheated:
+                        print("Game cannot be saved because you cheated!\n")
+                    else:
+                        self.save()
+                elif decision == "exit":
+                    self.__exit = True
+                    break
+                elif decision == "see abilities":
+                    self.__player.print_abilities_description()
+                elif decision == "buy":
                     self.__shop.buy_item()
-                except ShoppingError as PE:
-                    print(str(PE))
-                except PickingError as PE:
-                    print(str(PE))
-            elif decision == "sell":
-                try:
-                    self.__shop.sell_item()
-                except ShoppingError as SE:
-                    print(str(SE))
-            elif decision == "drop current item":
-                choice = input("Drop Weapon or Armour? W/A\n")
-                choice = choice.lower().strip()
-                try:
+                elif decision == "sell":
+                        self.__shop.sell_item()
+                elif decision == "drop current item":
+                    choice = input("Drop Weapon or Armour? W/A\n")
+                    choice = choice.lower().strip()
                     if choice == "w":
                         self.__player.move_weapon_to_inventory()
                     elif choice == "a":
                         self.__player.move_armour_to_inventory()
                     else:
                         print("Invalid Input!\n")
-                except DroppingError as DE:
-                    print(str(DE))
-            elif decision in self.__cheats.list_of_cheats.keys():
-                string = self.__cheats.list_of_cheats[decision](self)
-                print(string)
-                self.__shop = Shop(self.__player, self.__level)
-            elif decision != "proceed":
-                print("Invalid Command!")
+                elif decision in self.__cheats.list_of_cheats.keys():
+                    string = self.__cheats.list_of_cheats[decision](self)
+                    print(string)
+                    self.__shop = Shop(self.__player, self.__level)
+                elif decision != "proceed":
+                    print("Invalid Command!")
+            except SavingError as SE:
+                print(str(SE))
+            except ItemError as IE:
+                print(str(IE))
+            except ShoppingError as SE:
+                print(str(SE))
+            except PickingError as PE:
+                print(str(PE))
+            except DroppingError as DE:
+                print(str(DE))
 
     def level(self):
         if self.__level >= 7:
@@ -213,23 +216,46 @@ class Game:
                     break
                 self.__in_combat = True
         if self.__level == 7 and not self.__dead and not self.__exit:
-            #if not self.__hasCheated:
-            self.__last_level = LastLevel(self.__player, self.__past_selves)
-            self.__last_level.play_out()
-            #else:
-            #    print("Last level cannot be played because you cheated!\n")
+            if not self.__hasCheated:
+                self.__last_level = LastLevel(self.__player, self.__past_selves)
+                self.__last_level.play_out()
+            else:
+                print("Last level cannot be played because you cheated!\n")
 
     def save(self):
-        self.__player.save_level_and_status(self.__level, self.__save_file)
+        print("Choose the number of the Save File to save on:\n")
+        for savefile in self.__list_of_save_files:
+            print(savefile)
+        choice = int(input())
+        if not (0<=choice<=9):
+            raise SavingError("Invalid Save File!")
+        list_of_information = [self.__player, self.__level]
         for past_self in self.__past_selves:
-            past_self.save_character(self.__save_file)
+            list_of_information.append(past_self)
+        self.__list_of_save_files[choice].save_info(list_of_information)
 
     def load(self):
-        self.__level, selves = self.__player.load_save_file(self.__save_file)
+        '''self.__level, selves = self.__player.load_save_file(self.__save_file)
         self.__past_selves = []
         for past_self in selves:
             if past_self is not None:
                 self.__past_selves.append(past_self)
+        self.__shop = Shop(self.__player, self.__level)'''
+        print("Choose the number of the Save File to load:\n")
+        for savefile in self.__list_of_save_files:
+            print(savefile)
+        choice = int(input())
+        if not (0<=choice<=9):
+            raise SavingError("Invalid Save File!\n")
+        list_of_information = self.__list_of_save_files[choice].load_info()
+        length = len(list_of_information)
+        if length == 0:
+            raise SavingError("Cannot Load Empty File!\n")
+        self.__player = list_of_information[0]
+        self.__level = list_of_information[1]
+        self.__past_selves = []
+        for index in range(2, length):
+            self.__past_selves.append(list_of_information[index])
         self.__shop = Shop(self.__player, self.__level)
 
     def get_player(self):

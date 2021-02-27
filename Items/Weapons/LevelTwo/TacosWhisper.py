@@ -18,6 +18,3 @@ class TacosWhisper(Weapon):
             self.__turn_counter += 1
             string = ""
         return string
-
-    def get_id(self):
-        return 203

@@ -33,8 +33,7 @@ class HumanPlayer(Character):
         self.add_ability("strengthen", self.strengthen)
         self.abilities_to_learn = {2: BlindingRage(), 3: Discourage(), 4: Focus(), 5: CleanseDOT(), 6: TrueDamage(), 7: CCImunity(), 8: DoNothing()}
         self.respective_abilities = {"blindingrage": self.blinding_rage, "discourage": self.discourage, "focus": self.focus,
-                                     "cleansedot": self.cleanse_DOT, "truedamage": self.true_damage, "ccimunity": self.cc_immunity,
-                                     "donothing": self.donothing}
+                                     "cleansedot": self.cleanse_DOT, "truedamage": self.true_damage, "ccimunity": self.cc_immunity}
         self._ability_list = [Taunt(), Bolster(), Strengthen()]
         self._gold = 0
 
@@ -164,11 +163,6 @@ class HumanPlayer(Character):
         string = ability.cast(self, opponent, list_of_turns, turn_counter)
         return string
 
-    def donothing(self, opponent, list_of_turns, turn_counter):
-        ability = DoNothing()
-        string = ability.cast(self, opponent, list_of_turns, turn_counter)
-        return string
-
     def level_up(self):
         self.__level += 1
         self._health += 15
@@ -194,14 +188,6 @@ class HumanPlayer(Character):
         return self.__level
 
     def print_inventory(self):
-        '''string = ""
-        for element in self.__inventory:
-            if element == None:
-                string += "Empty Place\n"
-            else:
-                string += str(element)
-                string += "\n"
-        return string'''
         table = texttable.Texttable()
         table.add_row(["Inventory:"])
         for i in range(len(self.__inventory)):
@@ -225,74 +211,6 @@ class HumanPlayer(Character):
         self.re_set_attack_health()
         self._max_health = max_health
         self._gold = gold
-
-    def save_level_and_status(self, level, filename):
-        saved_level = level
-        name = self._name
-        attack = self._innate_attack
-        defense = self._innate_defense
-        weapon = self._weapon.get_id()
-        level_player = self.__level
-        armour = self._armor.get_id()
-        health = self._health
-        max_health = self._max_health
-        gold = self._gold
-        inventory = []
-        for element in self.__inventory:
-            if element is None:
-                inventory.append(0)
-            else:
-                inventory.append(element.get_id())
-
-        with open(filename, 'w') as file:
-            line = str(saved_level) + ";" + str(name) + ";" + str(attack) + ";" + str(defense) + ";" + str(weapon) + ";" + str(armour) + ";" + str(health) + ";" + str(max_health) + ";" + str(level_player) + ";" + str(gold) + ";"
-            for index in range (len(inventory)):
-                line += str(inventory[index])
-                if index != len(inventory) - 1:
-                    line += ";"
-            line += "\n"
-            file.write(line)
-
-    def load_save_file(self, filename):
-        with open(filename, 'r') as file:
-            lines = file.readlines()
-            if len(lines) == 0:
-                raise LoadingError("No save file to load!\n")
-            line = lines[0]
-            line = line.split(";")
-            saved_level = int(line[0])
-            name = line[1]
-            attack = int(line[2])
-            defense = int(line[3])
-            weapon_id = int(line[4])
-            weapon = self.ids[weapon_id]()
-            armour_id = int(line[5])
-            armour = self.ids[armour_id]()
-            health = float(line[6])
-            max_health = int(line[7])
-            level = int(line[8])
-            gold = int(line[9])
-            inventory = []
-        for index in range(10, 18):
-            if int(line[index]) == 0:
-                inventory.append(None)
-            else:
-                inventory.append(self.ids[int(line[index])]())
-        for index in range (2, saved_level + 1):
-            classname = self.abilities_to_learn[index]
-            self._ability_list.append(classname)
-            classname = type(classname).__name__
-            classname = classname.lower()
-            self.add_ability(classname, self.respective_abilities[classname])
-        self.set_up(name, attack, defense, weapon, armour, health, max_health, level, gold, inventory)
-        selves = [None,None,None]
-        current_self = 0
-        for index in range(1, len(lines)):
-            if lines[index] != "\n":
-                chara = self.load_character(filename, index)
-                selves[current_self] = chara
-                current_self += 1
-        return saved_level, selves
 
     def learn_ability(self, ability_name, ability_efect):
         self.add_ability(ability_name, ability_efect)

@@ -19,6 +19,3 @@ class FireDeflector(Armour):
             caster.clear_dot_effects()
             string = caster.get_name() + " has deflected his DOT effects onto " + opponent.get_name() + "!\n"
         return string
-
-    def get_id(self):
-        return 308

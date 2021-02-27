@@ -13,6 +13,3 @@ class OffensePotion(Potion):
         human_player.set_innate_attack(original_attack + 20)
         string = "Your defense has been increased by 20, but your health was reduced by 5!\n"
         return string
-
-    def get_id(self):
-        return 105
