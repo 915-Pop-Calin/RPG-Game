@@ -6,6 +6,10 @@ class PowerOfTheRing(Ability):
         super().__init__()
 
     def cast(self, caster, opponent, list_of_turns, turn_counter):
+        """
+        The caster's attack and defense are multiplied by 5 for 3 turns and can stack with itself. At the end, all
+        the debuffs are removed from the caster by decasting.
+        """
         attack = caster.get_attack_value()
         defense = caster.get_defense_value()
         caster.set_attack_value(attack * 5)
@@ -19,6 +23,9 @@ class PowerOfTheRing(Ability):
         return string
 
     def decast(self, caster, opponent):
+        """
+        All the debuffs are removed and everything is back to normal.
+        """
         caster.set_defense_and_armour_to_normal()
         string = caster.get_name() + "'s defense and attack were brought back to normal!\n"
         return string

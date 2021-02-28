@@ -7,7 +7,7 @@ from Items.Weapons.LevelOne.Words import Words
 
 class SpaghettiMonster(Character):
     def __init__(self):
-        super().__init__("Spaghetti Monster", 1, 300, Words(), TemArmor(), 100, "Represents the developer")
+        super().__init__("Spaghetti Monster", 1, 300, Words(), TemArmor(), 100, "Represents the developer\n")
         #super().__init__("Spaghetti Monster", 1, 300, Words(), TemArmor(), 10000, "Represents the developer")
         self.add_ability("entangle", self.entangle)
         self.add_ability("defensivestance", self.defensivestance)

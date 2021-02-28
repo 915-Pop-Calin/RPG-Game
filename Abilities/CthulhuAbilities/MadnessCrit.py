@@ -6,6 +6,9 @@ class MadnessCrit(Ability):
         super().__init__()
 
     def cast(self, caster, opponent, list_of_turns, turn_counter):
+        """
+        The ability is cast and our caster deals True Damage to our opponent proportionally regarding its missing sanity.
+        """
         missing_sanity = 100 - opponent.get_sanity()
         percentage_missing = missing_sanity / 100
         percentage_missing = round(percentage_missing, 2)

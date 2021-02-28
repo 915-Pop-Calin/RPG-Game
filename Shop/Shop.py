@@ -1,3 +1,5 @@
+import texttable
+
 from Exceptions.exceptions import ShoppingError
 from Items.Armors.LastStand import LastStand
 from Items.Armors.LevelFive.EyeOfSauron import EyeOfSauron
@@ -64,9 +66,24 @@ class Shop:
 
 
     def print_options(self):
-        print(str(self._human_player.get_gold()) + " gold available")
+        table = texttable.Texttable()
+        table.add_row(["Shop:"])
         for option in self._total_options:
-            print(option[0], "cost:", option[1], "gold\n")
+            table.add_row([str(option[0]) + " cost: " + str(option[1]) + "gold\n"])
+        print(table.draw())
+        #for option in self._total_options:
+        #    print(option[0], "cost:", option[1], "gold\n")
+        print(str(self._human_player.get_gold()) + " gold available")
+
+    def print_current_items(self):
+        table = texttable.Texttable()
+        table.add_row(["Items:"])
+        for element in self._human_player.get_inventory():
+            if element is not None:
+                #print(element, " GOLD: ", 0.75 * self.find_cost_by_class(element), "\n")
+                new_cost = 0.75 * self.find_cost_by_class(element)
+                table.add_row([str(element) + "gold: " + str(new_cost) + "\n"])
+        print(table.draw())
 
     def search_item_by_name(self, name):
         for index in range (len(self._total_options)):
@@ -90,9 +107,7 @@ class Shop:
         return None
 
     def sell_item(self):
-        for element in self._human_player.get_inventory():
-            if element is not None:
-                print(element, " GOLD: ", 0.75 * self.find_cost_by_class(element), "\n")
+        self.print_current_items()
         choice = input("the item you want to sell:\n")
         choice = choice.lower().strip()
         for option in self._all_items:

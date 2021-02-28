@@ -1,0 +1,7 @@
+From now on, in this folder, when we will think of the following notions:
+:param caster: an object of the type Character representing the one who casts the ability
+:param opponent: an object of the type Character who is the opponent in this situation
+:param list_of_turns: a dictionary representing actions that need to be undone in a certain amount of turns
+:param turn_counter: an integer representing the turn's number and a key for the dictionary above
+:return: the string which will be printed on the screen
+:decast: the undo of a buff which needs to be reverted after a given number of turns

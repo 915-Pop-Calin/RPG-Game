@@ -7,7 +7,7 @@ from Items.Weapons.LevelSix.TheRing import TheRing
 
 class Sauron(Character):
     def __init__(self):
-        super().__init__("Sauron", 2, 200, TheRing(), EyeOfSauron(), 200, "The Creator of the Ring")
+        super().__init__("Sauron", 2, 200, TheRing(), EyeOfSauron(), 200, "The Creator of the Ring\n")
         self.add_ability("powerofthering", self.powerofthering)
         self.add_ability("poweroftheeye", self.poweroftheeye)
 

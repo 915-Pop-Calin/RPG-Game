@@ -1,5 +1,6 @@
 import random
 import termcolor
+import texttable
 
 from Characters.Cthulhu import Cthulhu
 from Characters.HumanPlayer import HumanPlayer
@@ -68,10 +69,28 @@ class Game:
             self.out_of_combat()
 
     def print_menu(self):
-        string = "Game Options:\nproceed\nsave\nexit\n\n"
-        string += "Player Options:\nequip item\ndrop item\ncheck stats\ndrop current item\nsee abilities\n\n"
-        string += "Shop Options:\nbuy\nsell\n\n"
-        print(string)
+        table = texttable.Texttable()
+        table.set_cols_align(["l", "r", "c"])
+        table.add_row(["Game Options", "Player Options", "Shop Options"])
+        print(table.draw())
+
+    def print_game_options(self):
+        table = texttable.Texttable()
+        table.set_cols_align(["l", "r", "c", "c"])
+        table.add_row(["proceed", "save", "exit", "back"])
+        print(table.draw())
+
+    def print_player_options(self):
+        table = texttable.Texttable()
+        table.set_cols_align(["l", "r", "c", "c", "c", "c"])
+        table.add_row(["equip item", "drop item", "check stats", "drop current item", "see abilities", "back"])
+        print(table.draw())
+
+    def print_shop_options(self):
+        table = texttable.Texttable()
+        table.set_cols_align(["l", "r", "c"])
+        table.add_row(["buy", "sell", "back"])
+        print(table.draw())
 
     def out_of_combat(self):
         self.__shop = Shop(self.__player, self.__level)
@@ -81,53 +100,68 @@ class Game:
             decision = input()
             decision = decision.lower().strip()
             try:
-                if decision == "check stats":
-                    print(self.__player.print_stats())
-                elif decision == "equip item":
-                    print(self.__player.print_inventory())
-                    item = input("the item you want to equip:\n")
-                    if item == "back":
+                if decision == "game options":
+                    self.print_game_options()
+                    decision = input()
+                    if decision == "proceed" or decision == "back":
+                        pass
+                    elif decision == "save":
+                        if self.__hasCheated:
+                            print("Game cannot be saved because you cheated!\n")
+                        else:
+                            self.save()
+                    elif decision == "exit":
+                        self.__exit = True
+                        break
+                    else:
+                        print("Invalid command!")
+                elif decision == "player options":
+                    self.print_player_options()
+                    decision = input()
+                    if decision == "equip item":
+                        print(self.__player.print_inventory())
+                        item = input("the item you want to equip:\n")
+                        if item == "back":
+                            pass
+                        else:
+                            string = self.__player.use_item(item)
+                            print(string)
+                    elif decision == "drop item":
+                        print(self.__player.print_inventory())
+                        item = input("the item you want to drop:\n")
+                        if item == "back":
+                            pass
+                        else:
+                            string = self.__player.drop_item(item)
+                            print(string)
+                    elif decision == "check stats":
+                        print(self.__player.print_stats())
+                    elif decision == "drop current item":
+                        choice = input("Drop Weapon or Armour? W/A\n")
+                        choice = choice.lower().strip()
+                        if choice == "w":
+                            self.__player.move_weapon_to_inventory()
+                        elif choice == "a":
+                            self.__player.move_armour_to_inventory()
+                        else:
+                            print("Invalid Input!\n")
+                    elif decision == "see abilities":
+                        self.__player.print_abilities_description()
+                    elif decision == "back":
                         pass
                     else:
-                        string = self.__player.use_item(item)
-                        print(string)
-                elif decision == "drop item":
-                    print(self.__player.print_inventory())
-                    item = input("the item you want to drop:\n")
-                    if item == "back":
-                        pass
-                    else:
-                        string = self.__player.drop_item(item)
-                        print(string)
-                elif decision == "save":
-                    if self.__hasCheated:
-                        print("Game cannot be saved because you cheated!\n")
-                    else:
-                        self.save()
-                elif decision == "exit":
-                    self.__exit = True
-                    break
-                elif decision == "see abilities":
-                    self.__player.print_abilities_description()
-                elif decision == "buy":
-                    self.__shop.buy_item()
-                elif decision == "sell":
+                        print("Invalid command!\n")
+                elif decision == "shop options":
+                    self.print_shop_options()
+                    decision = input()
+                    if decision == "buy":
+                        self.__shop.buy_item()
+                    elif decision == "sell":
                         self.__shop.sell_item()
-                elif decision == "drop current item":
-                    choice = input("Drop Weapon or Armour? W/A\n")
-                    choice = choice.lower().strip()
-                    if choice == "w":
-                        self.__player.move_weapon_to_inventory()
-                    elif choice == "a":
-                        self.__player.move_armour_to_inventory()
+                    elif decision == "back":
+                        pass
                     else:
-                        print("Invalid Input!\n")
-                elif decision in self.__cheats.list_of_cheats.keys():
-                    string = self.__cheats.list_of_cheats[decision](self)
-                    print(string)
-                    self.__shop = Shop(self.__player, self.__level)
-                elif decision != "proceed":
-                    print("Invalid Command!")
+                        print("Invalid command!\n")
             except SavingError as SE:
                 print(str(SE))
             except ItemError as IE:
@@ -222,10 +256,18 @@ class Game:
             else:
                 print("Last level cannot be played because you cheated!\n")
 
+    def print_all_save_files(self):
+        table = texttable.Texttable()
+        table.add_row(["Save Files:"])
+        for i in range(len(self.__list_of_save_files)):
+            table.add_row([str(self.__list_of_save_files[i])])
+        print(table.draw())
+
     def save(self):
         print("Choose the number of the Save File to save on:\n")
-        for savefile in self.__list_of_save_files:
-            print(savefile)
+        self.print_all_save_files()
+        #for savefile in self.__list_of_save_files:
+        #    print(savefile)
         choice = int(input())
         if not (0<=choice<=9):
             raise SavingError("Invalid Save File!")
@@ -242,8 +284,9 @@ class Game:
                 self.__past_selves.append(past_self)
         self.__shop = Shop(self.__player, self.__level)'''
         print("Choose the number of the Save File to load:\n")
-        for savefile in self.__list_of_save_files:
-            print(savefile)
+        self.print_all_save_files()
+        #for savefile in self.__list_of_save_files:
+        #    print(savefile)
         choice = int(input())
         if not (0<=choice<=9):
             raise SavingError("Invalid Save File!\n")

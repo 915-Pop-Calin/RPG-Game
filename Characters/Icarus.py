@@ -7,7 +7,7 @@ from Items.Weapons.LevelFour.IcarusesTouch import IcarusesTouch
 
 class Icarus(Character):
     def __init__(self):
-        super().__init__("Icarus", 0, 100, IcarusesTouch(), SteelPlateau(), 200, "The corrupted mythological figure by flying too close to the sun")
+        super().__init__("Icarus", 0, 100, IcarusesTouch(), SteelPlateau(), 200, "The corrupted mythological figure by flying too close to the sun\n")
         self.add_ability("burn", self.burn)
         self.add_ability("burningwill", self.burning_will)
 

@@ -39,7 +39,7 @@ class Combat:
         self.__human_combat.check_undos(self.__computerPlayer)
         if not self.__human_combat.check_stun():
             if not self.__dead and not self.__combatDone:
-                self.print_options()
+                #self.print_options()
                 self.__human_combat.combat(self.__computerPlayer)
                 if self.__computerPlayer.get_hp() <= 0:
                     minimum_gold_to_gain = 10 * (self.__turn_counter + 1) * self.__humanPlayer.get_level() + 100

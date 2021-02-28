@@ -7,7 +7,7 @@ from Items.Weapons.Dreams import Dreams
 
 class Cthulhu(Character):
     def __init__(self):
-        super().__init__("Cthulhu", 7.5, 100, Dreams(), Scales(), 200, "The God which preys on your sanity")
+        super().__init__("Cthulhu", 7.5, 100, Dreams(), Scales(), 200, "The God which preys on your sanity\n")
         self.add_ability("triplehit", self.triplehit)
         self.add_ability("madnesscrit", self.madnesscrit)
 

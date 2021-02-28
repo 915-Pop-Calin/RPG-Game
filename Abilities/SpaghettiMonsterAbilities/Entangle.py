@@ -6,6 +6,10 @@ class Entangle(Ability):
         super().__init__()
 
     def cast(self, caster, opponent, list_of_turns, turn_counter):
+        """
+        Opponent is stalled for one turn by being stun, and the undo of this action is added to the list of abilities
+        to undo.
+        """
         opponent.stun()
         string = caster.get_name() + " casts Entangle!\n"
         string += opponent.get_name() + " is stunned for one turn!\n"
@@ -16,6 +20,9 @@ class Entangle(Ability):
         return string
 
     def decast(self, caster, opponent):
+        """
+        Caster is unstunned and he can do stuff again.
+        """
         opponent.unstun()
         string = opponent.get_name() + " is no longer stunned!\n"
         return string

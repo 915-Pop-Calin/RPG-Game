@@ -1,0 +1,14 @@
+The purpose of this file is to explain the mechanics of this game.
+As a classic RPG, the way you die is when your health gets reduced to 0. However, in this RPG, there is a new mechanic called "sanity".
+Whenever your sanity gets reduced to 0, you die as well; so you have to be careful to both.
+Critical Strike Chance (or Crit Chance) represents the chance your hits are critical, that is, your hits deal DOUBLE the damage.
+Your armour penetration represents the amount of armour your attacks ignore. So if you have x% armour penetration and enemy has y armour, your hits deal damage as if 
+the enemy has (1 - x%)* y armour.
+True Damage represents damage that goes through armour. So no matter how much armour the enemy has, your true damage always goes 100% through.
+DOT represents damage that is taken over multiple turns (damage over time). DOT is ALWAYS true damage and is taken at the start of your turn, before you can do anything.
+Stun represents a mechanic which makes you unable to attack. So if you're stunned, you can not attack. Stun is also known as CC (crowd control).
+However, if you're immune to CC, you can NOT be stunned. 
+The multiplier for attacking is 100 / (100 + x) if x >= 0 or 2 - 100 / (100 - x) if x < 0, where x is the counted armour, which can be computed as:
+x = enemy_armour * (1 - my_armor_pen).
+Lifesteal is a mechanic that lets you heal off your autos, as a percentage of the damage dealt.
+ 
