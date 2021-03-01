@@ -28,14 +28,18 @@ class LastLevel:
             if choice1 is not None:
                 choice2 = self.teen_chara_fight()
                 if choice2 is not  None:
-                    self.adult_chara_fight()
+                    choice3 = self.adult_chara_fight()
+                    if choice3 is not None:
+                        self.delete_save_files()
             print(termcolor.colored("BAD ENDING", "red"))
-            self.delete_save_files()
+
         if decision == "spare":
             self.spare()
-            if not self.__human_player.get_hp() <=0:
+            if not self.__human_player.get_hp() <=0 and not self.__human_player.get_sanity() <= 0:
                 print(termcolor.colored("GOOD ENDING", "blue"))
                 self.delete_save_files()
+            else:
+                print(termcolor.colored("BAD ENDING", "red"))
 
     def delete_save_files(self):
         for index in range (10):

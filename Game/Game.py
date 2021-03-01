@@ -162,6 +162,12 @@ class Game:
                         pass
                     else:
                         print("Invalid command!\n")
+                elif decision in self.__cheats.list_of_cheats.keys():
+                    string = self.__cheats.list_of_cheats[decision](self)
+                    print(string)
+                    self.__shop = Shop(self.__player, self.__level)
+                else:
+                    print("Invalid command!\n")
             except SavingError as SE:
                 print(str(SE))
             except ItemError as IE:
@@ -250,11 +256,11 @@ class Game:
                     break
                 self.__in_combat = True
         if self.__level == 7 and not self.__dead and not self.__exit:
-            if not self.__hasCheated:
-                self.__last_level = LastLevel(self.__player, self.__past_selves)
-                self.__last_level.play_out()
-            else:
-                print("Last level cannot be played because you cheated!\n")
+            #if not self.__hasCheated:
+            self.__last_level = LastLevel(self.__player, self.__past_selves)
+            self.__last_level.play_out()
+            #else:
+            #    print("Last level cannot be played because you cheated!\n")
 
     def print_all_save_files(self):
         table = texttable.Texttable()

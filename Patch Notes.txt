@@ -39,3 +39,7 @@ Patch Notes 0.1.5
 - Huge Gameplay changes - texttable mimics classic RPGs now and added some back buttons; we will continue on that path later
 - Some specifications added
 - Game guide with info added
+
+Patch Notes 0.1.6
+- Small bugfixes regarding the last fight, now fixed
+- TacosWhisper's effect damage buffed, now deals twice the damage on its fourth shot
