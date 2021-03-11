@@ -5,7 +5,7 @@ Any feedback should also be sent there! Thank you for taking your time! \
 Calin
 
 In order to play the game, you must have the following installed:  
-The newest Python version  
+The newest Python version  (3.9+)
 termcolor package   
 texttable package  
 In order to run it, open a command prompt in the cloned repo and just write py main.py
